@@ -14,7 +14,7 @@ const Controller = ({ editMode, setEditMode }: Props) => {
   const onClickHandler = (e: MouseEvent<HTMLLIElement>) => {
     const selectedMode = e.currentTarget.id;
     if (!isEditModeType(selectedMode)) return;
-    setEditMode(selectedMode === editMode ? 'none' : selectedMode);
+    setEditMode(selectedMode === editMode ? 'None' : selectedMode);
   };
   const controllerItems: { mode: EditModeType; icon: ReactNode }[] = [
     { mode: 'Crop', icon: <IoCropOutline className="text-2xl" /> },
@@ -26,6 +26,7 @@ const Controller = ({ editMode, setEditMode }: Props) => {
       {controllerItems.map(({ mode, icon }, idx) => {
         return (
           <ControllerItem
+            key={idx}
             mode={mode}
             onClickHandler={onClickHandler}
             selected={editMode === mode}
