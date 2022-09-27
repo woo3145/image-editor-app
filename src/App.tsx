@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Controller from './component/Controller';
 import Header from './component/Header';
 import ImageEditor from './component/ImageEditor';
+import ImageLayerProvider from './context/ImageLayerProvider';
 
 const SAMPLE_IMAGE1 = '/alvan-nee-lvFlpqEvuRM-unsplash.jpg';
 const SAMPLE_IMAGE2 = '/lachlan-gowen-cWwqwN2uTo4-unsplash.jpg';
@@ -12,7 +13,7 @@ export const isEditModeType = (mode: string): mode is EditModeType => {
 };
 
 function App() {
-  const [imageUrl, setImageUrl] = useState(SAMPLE_IMAGE1);
+  const [imageUrl, setImageUrl] = useState('');
   const [editMode, setEditMode] = useState<EditModeType>('None');
 
   return (
@@ -21,7 +22,9 @@ function App() {
       <div className="max-w-screen-2xl mx-auto py-8 flex flex-col items-center">
         <Controller editMode={editMode} setEditMode={setEditMode} />
         {/* Image Editor */}
-        <ImageEditor imageUrl={imageUrl} />
+        <ImageLayerProvider>
+          <ImageEditor imageUrl={imageUrl} />
+        </ImageLayerProvider>
         <div className="flex items-center gap-6 pt-8">
           <div
             onClick={() => setImageUrl(SAMPLE_IMAGE1)}
