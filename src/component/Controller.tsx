@@ -1,28 +1,38 @@
 import { IoCropOutline, IoPencilOutline } from 'react-icons/io5';
 import { BsArrowRepeat } from 'react-icons/bs';
-import TooltipIcon from './TooltipIcon';
+import { Dispatch, MouseEvent, ReactNode, SetStateAction } from 'react';
+import { EditModeType, isEditModeType } from '../App';
+import ControllerItem from './ControllerItem';
 
-const Controller = () => {
+interface Props {
+  editMode: EditModeType;
+  setEditMode: Dispatch<SetStateAction<EditModeType>>;
+}
+
+const Controller = ({ editMode, setEditMode }: Props) => {
+  // Mode Switching
+  const onClickHandler = (e: MouseEvent<HTMLLIElement>) => {
+    const selectedMode = e.currentTarget.id;
+    if (!isEditModeType(selectedMode)) return;
+    setEditMode(selectedMode === editMode ? 'none' : selectedMode);
+  };
+  const controllerItems: { mode: EditModeType; icon: ReactNode }[] = [
+    { mode: 'Crop', icon: <IoCropOutline className="text-2xl" /> },
+    { mode: 'Draw', icon: <IoPencilOutline className="text-2xl" /> },
+    { mode: 'Rotate', icon: <BsArrowRepeat className="text-2xl" /> },
+  ];
   return (
     <ul className="w-full flex items-center justify-center gap-4">
-      <li className="p-3 hover:bg-blue-900 hover:text-white rounded-md cursor-pointer group">
-        <TooltipIcon
-          icon={<IoCropOutline className="text-2xl" />}
-          tooltip={'Crop'}
-        />
-      </li>
-      <li className="p-3 hover:bg-blue-900 hover:text-white rounded-md cursor-pointer group">
-        <TooltipIcon
-          icon={<IoPencilOutline className="text-2xl" />}
-          tooltip={'Draw'}
-        />
-      </li>
-      <li className="p-3 hover:bg-blue-900 hover:text-white rounded-md cursor-pointer group">
-        <TooltipIcon
-          icon={<BsArrowRepeat className="text-2xl" />}
-          tooltip={'Rotate'}
-        />
-      </li>
+      {controllerItems.map(({ mode, icon }, idx) => {
+        return (
+          <ControllerItem
+            mode={mode}
+            onClickHandler={onClickHandler}
+            selected={editMode === mode}
+            icon={icon}
+          />
+        );
+      })}
     </ul>
   );
 };

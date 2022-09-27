@@ -6,7 +6,6 @@ interface Props {
 }
 
 const TooltipIcon = ({ icon, tooltip }: Props) => {
-  console.log(icon);
   return (
     <div className="group relative flex justify-center">
       {icon}
