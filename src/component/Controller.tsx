@@ -1,15 +1,21 @@
 import { IoCropOutline, IoPencilOutline } from 'react-icons/io5';
 import { BsArrowRepeat } from 'react-icons/bs';
-import { Dispatch, MouseEvent, ReactNode, SetStateAction } from 'react';
-import { EditModeType, isEditModeType } from '../App';
+import {
+  Dispatch,
+  MouseEvent,
+  ReactNode,
+  SetStateAction,
+  useContext,
+} from 'react';
+import { EditModeContext, EditModeType, isEditModeType } from '../App';
 import ControllerItem from './ControllerItem';
 
 interface Props {
-  editMode: EditModeType;
   setEditMode: Dispatch<SetStateAction<EditModeType>>;
 }
 
-const Controller = ({ editMode, setEditMode }: Props) => {
+const Controller = ({ setEditMode }: Props) => {
+  const { editMode } = useContext(EditModeContext);
   // Mode Switching
   const onClickHandler = (e: MouseEvent<HTMLLIElement>) => {
     const selectedMode = e.currentTarget.id;

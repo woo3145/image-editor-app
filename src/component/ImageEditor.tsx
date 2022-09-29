@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { resizeImage } from '../utils/imageUtils';
+import ImageCropLayer from './ImageCropLayer';
 import ImageDragLayer from './ImageDragLayer';
 import ImagePreviewLayer from './ImagePreviewLayer';
 
@@ -32,6 +33,7 @@ const ImageEditor = ({ imageUrl }: Props) => {
       {image ? (
         <div className="w-full flex items-center justify-center relative">
           <ImagePreviewLayer image={image} imageSize={imageSize} />
+          <ImageCropLayer image={image} imageSize={imageSize} />
           <ImageDragLayer image={image} imageSize={imageSize} />
         </div>
       ) : (
