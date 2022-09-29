@@ -52,6 +52,8 @@ const ImageCropLayer = ({ image, imageSize }: Props) => {
     drawCropArea();
   }, [drawCropArea]);
 
+  if (editMode !== 'Crop') return null;
+
   return <canvas className="absolute top-0" ref={cropLayer} />;
 };
 
