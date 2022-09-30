@@ -16,7 +16,7 @@
 - CropLayer
 
   - [x] Layer 어둡게 처리 후 Drag 영역만 밝게 표시
-  - [ ] Crop Submenu UI (확인, 취소, 비율 지정)
+  - [x] Crop Submenu UI (확인, 취소, 비율 지정)
     - [ ] Crop 확인 시 Drag 영역을 ImageEditor 컴포넌트의 이미지 상태값에 저장함
     - [ ] Crop 취소 시 CropMode 종료
 
