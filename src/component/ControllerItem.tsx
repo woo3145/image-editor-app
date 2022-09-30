@@ -1,5 +1,5 @@
 import { MouseEvent, ReactNode } from 'react';
-import { EditModeType } from '../App';
+import { EditModeType } from '../context/EditModeProvider';
 import TooltipIcon from './TooltipIcon';
 
 interface Props {

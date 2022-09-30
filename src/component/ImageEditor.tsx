@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { resizeImage } from '../utils/imageUtils';
 import ImageCropLayer from './ImageCropLayer';
 import ImageDragLayer from './ImageDragLayer';
+import ImageEditorSubmenu from './ImageEditorSubmenu';
 import ImagePreviewLayer from './ImagePreviewLayer';
 
 interface Props {
@@ -29,7 +30,8 @@ const ImageEditor = ({ imageUrl }: Props) => {
   }, [imageUrl]);
 
   return (
-    <div className="w-full max-w-screen-lg pt-8 ">
+    <div className="w-full max-w-screen-lg pt-2 ">
+      <ImageEditorSubmenu />
       {image ? (
         <div className="w-full flex items-center justify-center relative">
           <ImagePreviewLayer image={image} imageSize={imageSize} />

@@ -1,35 +1,22 @@
-import React, { createContext, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import Controller from './component/Controller';
 import Header from './component/Header';
 import ImageEditor from './component/ImageEditor';
+import EditModeProvider from './context/EditModeProvider';
 import ImageLayerProvider from './context/ImageLayerProvider';
 
 const SAMPLE_IMAGE1 = '/alvan-nee-lvFlpqEvuRM-unsplash.jpg';
 const SAMPLE_IMAGE2 = '/lachlan-gowen-cWwqwN2uTo4-unsplash.jpg';
 
-export type EditModeType = 'Crop' | 'Draw' | 'Rotate' | 'None';
-export const isEditModeType = (mode: string): mode is EditModeType => {
-  return ['Crop', 'Draw', 'Rotate', 'None'].includes(mode);
-};
-export const EditModeContext = createContext<{ editMode: EditModeType }>({
-  editMode: 'None',
-});
 function App() {
   const [imageUrl, setImageUrl] = useState('');
-  const [editMode, setEditMode] = useState<EditModeType>('None');
-
-  const editModeContextValue = useMemo(() => {
-    return {
-      editMode: editMode,
-    };
-  }, [editMode]);
 
   return (
-    <EditModeContext.Provider value={editModeContextValue}>
-      <div className="font-light tracking-wider">
-        <Header />
-        <div className="max-w-screen-2xl mx-auto py-8 flex flex-col items-center">
-          <Controller setEditMode={setEditMode} />
+    <div className="font-light tracking-wider">
+      <Header />
+      <div className="max-w-screen-2xl mx-auto py-8 flex flex-col items-center">
+        <EditModeProvider>
+          <Controller />
           {/* Image Editor */}
           <ImageLayerProvider>
             <ImageEditor imageUrl={imageUrl} />
@@ -48,9 +35,9 @@ function App() {
               이미지 2
             </div>
           </div>
-        </div>
+        </EditModeProvider>
       </div>
-    </EditModeContext.Provider>
+    </div>
   );
 }
 

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { EditModeContext } from '../App';
+import { EditModeContext } from '../context/EditModeProvider';
 import {
   DragAreaContext,
   ImageLayerContext,
