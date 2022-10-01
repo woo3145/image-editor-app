@@ -31,7 +31,7 @@ const ImageEditor = ({ imageUrl }: Props) => {
 
   return (
     <div className="w-full max-w-screen-lg pt-2 ">
-      <ImageEditorSubmenu />
+      <ImageEditorSubmenu setImage={setImage} setImageSize={setImageSize} />
       {image ? (
         <div className="w-full flex items-center justify-center relative">
           <ImagePreviewLayer image={image} imageSize={imageSize} />

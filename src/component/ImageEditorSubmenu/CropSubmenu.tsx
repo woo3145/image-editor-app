@@ -1,13 +1,47 @@
-import { MouseEvent, ReactNode, useState } from 'react';
+import { MouseEvent, ReactNode, useContext, useState } from 'react';
 import { BsCheck2 } from 'react-icons/bs';
 import { GiSquare } from 'react-icons/gi';
 import { IoCloseOutline } from 'react-icons/io5';
+import { EditModeContext } from '../../context/EditModeProvider';
+import {
+  DragAreaContext,
+  ImageLayerContext,
+} from '../../context/ImageLayerProvider';
 
-const CropSubmenu = () => {
+interface Props {
+  applyEditedImage: (editedImage: ImageData) => void;
+}
+
+const CropSubmenu = ({ applyEditedImage }: Props) => {
   const [cropMode, setCropMode] = useState('Custom');
+  const { dragArea, setDragArea } = useContext(DragAreaContext);
+  const { previewLayer } = useContext(ImageLayerContext);
+  const { setEditMode } = useContext(EditModeContext);
 
   const onClickModeChange = (e: MouseEvent<HTMLDivElement>) => {
     setCropMode(e.currentTarget.id);
+  };
+
+  const onClickApply = () => {
+    if (!previewLayer?.current || !dragArea || !setDragArea) return;
+    const previewCanvas = previewLayer.current;
+    const previewContext = previewCanvas.getContext('2d');
+
+    const cropedImage = previewContext?.getImageData(
+      dragArea.x,
+      dragArea.y,
+      dragArea.width,
+      dragArea.height
+    );
+
+    if (!cropedImage) return;
+    applyEditedImage(cropedImage);
+  };
+
+  const onClickCancel = () => {
+    if (!setDragArea || !setEditMode) return;
+    setDragArea({ x: 0, y: 0, width: 0, height: 0 });
+    setEditMode('None');
   };
 
   return (
@@ -21,11 +55,17 @@ const CropSubmenu = () => {
         />
       </div>
       <div className="flex gap-4 mt-4">
-        <div className="flex items-center gap-2 text-lg cursor-pointer opacity-60 hover:opacity-100">
+        <div
+          onClick={onClickApply}
+          className="flex items-center gap-2 text-lg cursor-pointer opacity-60 hover:opacity-100"
+        >
           <BsCheck2 />
           적용
         </div>
-        <div className="flex items-center gap-2 text-lg cursor-pointer opacity-60 hover:opacity-100">
+        <div
+          onClick={onClickCancel}
+          className="flex items-center gap-2 text-lg cursor-pointer opacity-60 hover:opacity-100"
+        >
           <IoCloseOutline />
           취소
         </div>

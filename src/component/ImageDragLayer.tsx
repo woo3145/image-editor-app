@@ -74,7 +74,9 @@ const ImageDragLayer = ({ image, imageSize }: Props) => {
 
   return (
     <canvas
-      className="absolute top-0 z-10 cursor-crosshair"
+      className={`absolute top-0 z-10  ${
+        editMode === 'None' ? '' : 'cursor-crosshair'
+      }`}
       ref={dragLayer}
       onMouseDown={onMouseDownHandler}
       onMouseMove={onMouseMoveHandler}
