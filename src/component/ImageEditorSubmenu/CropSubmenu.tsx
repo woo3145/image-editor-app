@@ -2,11 +2,9 @@ import { MouseEvent, ReactNode, useContext, useState } from 'react';
 import { BsCheck2 } from 'react-icons/bs';
 import { GiSquare } from 'react-icons/gi';
 import { IoCloseOutline } from 'react-icons/io5';
+import { DragAreaContext } from '../../context/DragAreaProvider';
 import { EditModeContext } from '../../context/EditModeProvider';
-import {
-  DragAreaContext,
-  ImageLayerContext,
-} from '../../context/ImageLayerProvider';
+import { ImageLayerContext } from '../../context/ImageLayerProvider';
 
 interface Props {
   applyEditedImage: (editedImage: ImageData) => void;
@@ -24,6 +22,7 @@ const CropSubmenu = ({ applyEditedImage }: Props) => {
 
   const onClickApply = () => {
     if (!previewLayer?.current || !dragArea || !setDragArea) return;
+
     const previewCanvas = previewLayer.current;
     const previewContext = previewCanvas.getContext('2d');
 

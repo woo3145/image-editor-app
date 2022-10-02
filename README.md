@@ -19,7 +19,7 @@
   - [x] Crop Submenu UI (확인, 취소, 비율 지정)
     - [x] Crop 확인 시 Drag 영역을 ImageEditor 컴포넌트의 이미지 상태값에 저장함
     - [x] Crop 취소 시 CropMode 종료
-    - [ ] ++ 이미지가 캔버스 최대 사이즈보다 작을 때 수정필요
+    - [x] ++ 이미지가 캔버스 최대 사이즈보다 작을 때 수정필요
 
 - DrawLayer
 

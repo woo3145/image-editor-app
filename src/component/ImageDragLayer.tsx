@@ -1,9 +1,7 @@
 import React, { useContext, useEffect } from 'react';
+import { DragAreaContext } from '../context/DragAreaProvider';
 import { EditModeContext } from '../context/EditModeProvider';
-import {
-  DragAreaContext,
-  ImageLayerContext,
-} from '../context/ImageLayerProvider';
+import { ImageLayerContext } from '../context/ImageLayerProvider';
 import { IImageSize } from './ImageEditor';
 
 interface Props {
@@ -13,7 +11,7 @@ interface Props {
 
 const ImageDragLayer = ({ image, imageSize }: Props) => {
   const { dragLayer } = useContext(ImageLayerContext);
-  const { setDragArea } = useContext(DragAreaContext);
+  const { setDragArea, resetDragArea } = useContext(DragAreaContext);
   const { editMode } = useContext(EditModeContext);
 
   // Drag Layer 생성
@@ -26,9 +24,9 @@ const ImageDragLayer = ({ image, imageSize }: Props) => {
 
     // EditMode가 끝나거나 이미지가 변경되면 실행됨
     return () => {
-      if (setDragArea) setDragArea({ x: 0, y: 0, width: 0, height: 0 });
+      resetDragArea();
     };
-  }, [imageSize, image, dragLayer, editMode, setDragArea]);
+  }, [imageSize, image, dragLayer, editMode, resetDragArea]);
 
   const onMouseDownHandler = ({
     buttons,
@@ -39,7 +37,7 @@ const ImageDragLayer = ({ image, imageSize }: Props) => {
       return;
     if (buttons !== 1) return;
 
-    setDragArea({ x: 0, y: 0, width: 0, height: 0 });
+    resetDragArea();
 
     const canvas = dragLayer.current;
     const canvasPosition = canvas.getBoundingClientRect();

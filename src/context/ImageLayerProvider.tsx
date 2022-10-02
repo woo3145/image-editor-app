@@ -1,39 +1,16 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  RefObject,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-
-interface IDragArea {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+import { createContext, ReactNode, RefObject, useMemo, useRef } from 'react';
+import DragAreaProvider from './DragAreaProvider';
 
 interface IImageLayerContext {
   previewLayer: RefObject<HTMLCanvasElement> | null;
   dragLayer: RefObject<HTMLCanvasElement> | null;
   cropLayer: RefObject<HTMLCanvasElement> | null;
 }
-interface IDragAreaContext {
-  dragArea: IDragArea | null;
-  setDragArea: Dispatch<React.SetStateAction<IDragArea>> | null;
-}
 
 export const ImageLayerContext = createContext<IImageLayerContext>({
   previewLayer: null,
   dragLayer: null,
   cropLayer: null,
-});
-
-export const DragAreaContext = createContext<IDragAreaContext>({
-  dragArea: null,
-  setDragArea: null,
 });
 
 interface Props {
@@ -45,13 +22,6 @@ const ImageLayerProvider = ({ children }: Props) => {
   const dragLayer = useRef(null);
   const cropLayer = useRef(null);
 
-  const [dragArea, setDragArea] = useState({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
-
   const imageLayerContextValue = useMemo(() => {
     return {
       previewLayer,
@@ -60,15 +30,9 @@ const ImageLayerProvider = ({ children }: Props) => {
     };
   }, [previewLayer]);
 
-  const dragAreaContextValue = useMemo(() => {
-    return { dragArea, setDragArea };
-  }, [dragArea, setDragArea]);
-
   return (
     <ImageLayerContext.Provider value={imageLayerContextValue}>
-      <DragAreaContext.Provider value={dragAreaContextValue}>
-        {children}
-      </DragAreaContext.Provider>
+      <DragAreaProvider>{children}</DragAreaProvider>
     </ImageLayerContext.Provider>
   );
 };

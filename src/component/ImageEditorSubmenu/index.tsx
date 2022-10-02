@@ -1,9 +1,7 @@
 import { Dispatch, SetStateAction, useContext } from 'react';
+import { DragAreaContext } from '../../context/DragAreaProvider';
 import { EditModeContext } from '../../context/EditModeProvider';
-import {
-  DragAreaContext,
-  ImageLayerContext,
-} from '../../context/ImageLayerProvider';
+import { ImageLayerContext } from '../../context/ImageLayerProvider';
 import { resizeImage } from '../../utils/imageUtils';
 import { IImageSize } from '../ImageEditor';
 import CropSubmenu from './CropSubmenu';
@@ -15,17 +13,17 @@ interface Props {
 
 const ImageEditorSubmenu = ({ setImage, setImageSize }: Props) => {
   const { previewLayer } = useContext(ImageLayerContext);
-  const { setDragArea } = useContext(DragAreaContext);
+  const { resetDragArea } = useContext(DragAreaContext);
 
   const applyEditedImage = (editedImage: ImageData) => {
-    if (!previewLayer?.current || !setDragArea) return;
+    if (!previewLayer?.current) return;
     const previewCanvas = previewLayer.current;
     const previewContext = previewCanvas.getContext('2d');
 
     previewCanvas.width = editedImage.width;
     previewCanvas.height = editedImage.height;
-    setDragArea({ x: 0, y: 0, width: 0, height: 0 });
     previewContext?.putImageData(editedImage, 0, 0);
+    resetDragArea();
 
     const image = new Image();
     image.src = previewCanvas.toDataURL('image/jpeg');
