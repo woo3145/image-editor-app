@@ -1,21 +1,18 @@
 import { useCallback, useContext, useEffect } from 'react';
-import { DragAreaContext } from '../context/DragAreaProvider';
-import { EditModeContext } from '../context/EditModeProvider';
-import { ImageLayerContext } from '../context/ImageLayerProvider';
-import { IImageSize } from './ImageEditor';
+import { DragAreaContext } from '../../context/DragAreaProvider';
+import { EditModeContext } from '../../context/EditModeProvider';
+import { ImageLayerContext } from '../../context/ImageLayerProvider';
+import { ImageContext } from '../../context/ImageProvider';
 
-interface Props {
-  image: HTMLImageElement | null;
-  imageSize: IImageSize;
-}
-
-const ImageCropLayer = ({ image, imageSize }: Props) => {
+const ImageCropLayer = () => {
   const { cropLayer } = useContext(ImageLayerContext);
   const { dragArea } = useContext(DragAreaContext);
   const { editMode } = useContext(EditModeContext);
+  const { image, imageSize } = useContext(ImageContext);
 
   const drawBackground = useCallback(
     (context: CanvasRenderingContext2D) => {
+      if (!imageSize) return;
       context.clearRect(0, 0, imageSize.width, imageSize.height);
       context.fillStyle = 'rgb(0,0,0,0.4)';
       context.fillRect(0, 0, imageSize.width, imageSize.height);
@@ -48,7 +45,8 @@ const ImageCropLayer = ({ image, imageSize }: Props) => {
 
   // Crop Layer 생성
   useEffect(() => {
-    if (!cropLayer?.current || !image || editMode !== 'Crop') return;
+    if (!cropLayer?.current || !image || editMode !== 'Crop' || !imageSize)
+      return;
     const canvas = cropLayer.current;
 
     canvas.width = imageSize.width;

@@ -1,17 +1,13 @@
 import { useContext, useEffect } from 'react';
-import { ImageLayerContext } from '../context/ImageLayerProvider';
-import { IImageSize } from './ImageEditor';
+import { ImageLayerContext } from '../../context/ImageLayerProvider';
+import { ImageContext } from '../../context/ImageProvider';
 
-interface Props {
-  image: HTMLImageElement | null;
-  imageSize: IImageSize;
-}
-
-const ImagePreviewLayer = ({ image, imageSize }: Props) => {
+const ImagePreviewLayer = () => {
   const { previewLayer } = useContext(ImageLayerContext);
+  const { image, imageSize } = useContext(ImageContext);
 
   useEffect(() => {
-    if (!previewLayer?.current || !image) return;
+    if (!previewLayer?.current || !image || !imageSize) return;
     const canvas = previewLayer.current;
     const context = canvas.getContext('2d');
 
@@ -19,6 +15,7 @@ const ImagePreviewLayer = ({ image, imageSize }: Props) => {
     canvas.height = imageSize.height;
     context?.drawImage(image, 0, 0, imageSize.width, imageSize.height);
   }, [image, imageSize, previewLayer]);
+
   return <canvas className="top-0" ref={previewLayer} />;
 };
 

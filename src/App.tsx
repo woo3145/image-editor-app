@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Controller from './component/Controller';
 import Header from './component/Header';
 import ImageEditor from './component/ImageEditor';
+import DragAreaProvider from './context/DragAreaProvider';
 import EditModeProvider from './context/EditModeProvider';
 import ImageLayerProvider from './context/ImageLayerProvider';
+import ImageProvider from './context/ImageProvider';
 
 const SAMPLE_IMAGE1 = '/alvan-nee-lvFlpqEvuRM-unsplash.jpg';
 const SAMPLE_IMAGE2 = '/lachlan-gowen-cWwqwN2uTo4-unsplash.jpg';
@@ -18,9 +20,13 @@ function App() {
         <EditModeProvider>
           <Controller />
           {/* Image Editor */}
-          <ImageLayerProvider>
-            <ImageEditor imageUrl={imageUrl} />
-          </ImageLayerProvider>
+          <ImageProvider>
+            <ImageLayerProvider>
+              <DragAreaProvider>
+                <ImageEditor imageUrl={imageUrl} />
+              </DragAreaProvider>
+            </ImageLayerProvider>
+          </ImageProvider>
           <div className="flex items-center gap-6 pt-8">
             <div
               onClick={() => setImageUrl(SAMPLE_IMAGE1)}

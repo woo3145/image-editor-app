@@ -1,5 +1,4 @@
 import { createContext, ReactNode, RefObject, useMemo, useRef } from 'react';
-import DragAreaProvider from './DragAreaProvider';
 
 interface IImageLayerContext {
   previewLayer: RefObject<HTMLCanvasElement> | null;
@@ -32,7 +31,7 @@ const ImageLayerProvider = ({ children }: Props) => {
 
   return (
     <ImageLayerContext.Provider value={imageLayerContextValue}>
-      <DragAreaProvider>{children}</DragAreaProvider>
+      {children}
     </ImageLayerContext.Provider>
   );
 };

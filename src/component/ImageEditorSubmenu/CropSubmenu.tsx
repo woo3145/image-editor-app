@@ -1,46 +1,15 @@
-import { MouseEvent, ReactNode, useContext, useState } from 'react';
+import { MouseEvent, ReactNode, useState } from 'react';
 import { BsCheck2 } from 'react-icons/bs';
 import { GiSquare } from 'react-icons/gi';
 import { IoCloseOutline } from 'react-icons/io5';
-import { DragAreaContext } from '../../context/DragAreaProvider';
-import { EditModeContext } from '../../context/EditModeProvider';
-import { ImageLayerContext } from '../../context/ImageLayerProvider';
+import useCropImage from '../../hooks/useCropImage';
 
-interface Props {
-  applyEditedImage: (editedImage: ImageData) => void;
-}
-
-const CropSubmenu = ({ applyEditedImage }: Props) => {
+const CropSubmenu = () => {
   const [cropMode, setCropMode] = useState('Custom');
-  const { dragArea, setDragArea } = useContext(DragAreaContext);
-  const { previewLayer } = useContext(ImageLayerContext);
-  const { setEditMode } = useContext(EditModeContext);
+  const { onClickApply, onClickCancel } = useCropImage();
 
   const onClickModeChange = (e: MouseEvent<HTMLDivElement>) => {
     setCropMode(e.currentTarget.id);
-  };
-
-  const onClickApply = () => {
-    if (!previewLayer?.current || !dragArea || !setDragArea) return;
-
-    const previewCanvas = previewLayer.current;
-    const previewContext = previewCanvas.getContext('2d');
-
-    const cropedImage = previewContext?.getImageData(
-      dragArea.x,
-      dragArea.y,
-      dragArea.width,
-      dragArea.height
-    );
-
-    if (!cropedImage) return;
-    applyEditedImage(cropedImage);
-  };
-
-  const onClickCancel = () => {
-    if (!setDragArea || !setEditMode) return;
-    setDragArea({ x: 0, y: 0, width: 0, height: 0 });
-    setEditMode('None');
   };
 
   return (

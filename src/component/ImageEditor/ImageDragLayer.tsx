@@ -1,22 +1,18 @@
 import React, { useContext, useEffect } from 'react';
-import { DragAreaContext } from '../context/DragAreaProvider';
-import { EditModeContext } from '../context/EditModeProvider';
-import { ImageLayerContext } from '../context/ImageLayerProvider';
-import { IImageSize } from './ImageEditor';
+import { DragAreaContext } from '../../context/DragAreaProvider';
+import { EditModeContext } from '../../context/EditModeProvider';
+import { ImageLayerContext } from '../../context/ImageLayerProvider';
+import { ImageContext } from '../../context/ImageProvider';
 
-interface Props {
-  image: HTMLImageElement | null;
-  imageSize: IImageSize;
-}
-
-const ImageDragLayer = ({ image, imageSize }: Props) => {
+const ImageDragLayer = () => {
   const { dragLayer } = useContext(ImageLayerContext);
   const { setDragArea, resetDragArea } = useContext(DragAreaContext);
   const { editMode } = useContext(EditModeContext);
+  const { image, imageSize } = useContext(ImageContext);
 
   // Drag Layer 생성
   useEffect(() => {
-    if (!dragLayer?.current || editMode === 'None') return;
+    if (!dragLayer?.current || editMode === 'None' || !imageSize) return;
     const canvas = dragLayer.current;
 
     canvas.width = imageSize.width;
