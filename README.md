@@ -25,7 +25,7 @@
 
   - 여기에선 Preview Layer에 바로 그려주고 기능만 구현
   - [ ] DragArea의 width와 height를 기준으로 그림
-  - [ ] Draw Submenu UI (펜/지우개, 색, 두께, 초기화) (ContextAPI 사용해야함)
+  - [x] Draw Submenu UI (펜/지우개, 색, 두께, 초기화)
   - [ ] 한번의 드로잉 단위로 되돌리기 (Canvas API - save, restore)
     - DragArea의 x,y 가 변경 될 때 save
 
