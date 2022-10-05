@@ -3,6 +3,7 @@ import Controller from './component/Controller';
 import Header from './component/Header';
 import ImageEditor from './component/ImageEditor';
 import DragAreaProvider from './context/DragAreaProvider';
+import DrawProvider from './context/DrawProvider';
 import EditModeProvider from './context/EditModeProvider';
 import ImageLayerProvider from './context/ImageLayerProvider';
 import ImageProvider from './context/ImageProvider';
@@ -23,7 +24,9 @@ function App() {
           <ImageProvider>
             <ImageLayerProvider>
               <DragAreaProvider>
-                <ImageEditor imageUrl={imageUrl} />
+                <DrawProvider>
+                  <ImageEditor imageUrl={imageUrl} />
+                </DrawProvider>
               </DragAreaProvider>
             </ImageLayerProvider>
           </ImageProvider>

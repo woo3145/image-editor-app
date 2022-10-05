@@ -4,6 +4,7 @@ import ImageDragLayer from './ImageDragLayer';
 import ImageEditorSubmenu from '../ImageEditorSubmenu';
 import ImagePreviewLayer from './ImagePreviewLayer';
 import { ImageContext } from '../../context/ImageProvider';
+import ImageDrawLayer from './ImageDrawLayer';
 
 interface Props {
   imageUrl: string;
@@ -22,6 +23,7 @@ const ImageEditor = ({ imageUrl }: Props) => {
         <div className="w-full flex items-center justify-center relative">
           <ImagePreviewLayer />
           <ImageCropLayer />
+          <ImageDrawLayer />
           <ImageDragLayer />
         </div>
       ) : (

@@ -1,14 +1,16 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext } from 'react';
 import { BsEraserFill } from 'react-icons/bs';
 import { IoPencil } from 'react-icons/io5';
+import { DrawContext } from '../../../context/DrawProvider';
 import ColorPicker from './ColorPicker';
 
 const DrawSubmenu = () => {
-  const [range, setRange] = useState(15);
-  const [penType, setPentype] = useState('Pen');
+  const { range, setRange } = useContext(DrawContext);
+  const { penType, setPenType } = useContext(DrawContext);
 
   const onChangeRange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    if (!setRange) return;
     setRange(parseInt(value));
   };
 
@@ -16,7 +18,10 @@ const DrawSubmenu = () => {
     <div className="flex flex-col items-center">
       <div className="flex gap-6">
         <div
-          onClick={() => setPentype('Pen')}
+          onClick={() => {
+            if (!setPenType) return;
+            setPenType('Pen');
+          }}
           className="flex flex-col items-center justify-center gap-1"
         >
           <IoPencil
@@ -26,7 +31,12 @@ const DrawSubmenu = () => {
           />
           <label className="text-xs">펜</label>
         </div>
-        <div onClick={() => setPentype('Eraser')}>
+        <div
+          onClick={() => {
+            if (!setPenType) return;
+            setPenType('Eraser');
+          }}
+        >
           <BsEraserFill
             className={`w-9 h-9 rounded-full cursor-pointer border ${
               penType === 'Eraser' ? 'opacity-100' : 'opacity-30'
