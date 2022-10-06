@@ -68,7 +68,7 @@ const ImageDragLayer = () => {
 
   return (
     <canvas
-      className={`absolute top-0 z-10  ${
+      className={`absolute top-0 z-30  ${
         editMode === 'None' ? '' : 'cursor-crosshair'
       }`}
       ref={dragLayer}
