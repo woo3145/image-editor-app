@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext } from 'react';
-import { BsEraserFill } from 'react-icons/bs';
+import { RiRulerLine } from 'react-icons/ri';
 import { IoPencil } from 'react-icons/io5';
 import { DrawContext } from '../../../context/DrawProvider';
 import ColorPicker from './ColorPicker';
@@ -20,29 +20,30 @@ const DrawSubmenu = () => {
         <div
           onClick={() => {
             if (!setPenType) return;
-            setPenType('Pen');
+            setPenType('Free');
           }}
           className="flex flex-col items-center justify-center gap-1"
         >
           <IoPencil
             className={`w-9 h-9 rounded-full cursor-pointer border ${
-              penType === 'Pen' ? 'opacity-100' : 'opacity-30'
+              penType === 'Free' ? 'opacity-100' : 'opacity-30'
             }`}
           />
-          <label className="text-xs">펜</label>
+          <label className="text-xs">자유</label>
         </div>
         <div
           onClick={() => {
             if (!setPenType) return;
-            setPenType('Eraser');
+            setPenType('Straight');
           }}
+          className="flex flex-col items-center justify-center gap-1"
         >
-          <BsEraserFill
+          <RiRulerLine
             className={`w-9 h-9 rounded-full cursor-pointer border ${
-              penType === 'Eraser' ? 'opacity-100' : 'opacity-30'
+              penType === 'Straight' ? 'opacity-100' : 'opacity-30'
             }`}
           />
-          <label className="text-xs">지우개</label>
+          <label className="text-xs">직선</label>
         </div>
         <div className="border-r"></div>
         <ColorPicker />

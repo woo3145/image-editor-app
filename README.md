@@ -23,10 +23,10 @@
 
 - DrawLayer
 
-  - (지우개가 그려진 선만 지우도록 DrawLayer에 그려주도록 함)
   - [x] DragArea의 offsetX, offsetY 기준으로 그림
-  - [x] Draw Submenu UI (펜/지우개, 색, 두께, 초기화) (Context API 사용)
-  - [x] 지우개 기능
+  - [x] Draw Submenu UI (자유/직선, 색, 두께, 초기화) (Context API 사용)
+  - [x] 자유선 (PreviewLayer에 바로 그림)
+  - [ ] 직선 (마우스를 땔때까지 직선의 경로가 정해진게 아님으로 DrawLayer에 미리 표시 후 마우스를 땔때 previewLayer에 그려줘야할듯)
   - [ ] 한번의 드로잉 단위로 되돌리기 (Canvas API - save, restore)
     - DragArea의 x,y 가 변경 될 때 save
 

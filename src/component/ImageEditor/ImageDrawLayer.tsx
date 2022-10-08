@@ -1,85 +1,64 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { DrawContext } from '../../context/DrawProvider';
-import { EditModeContext } from '../../context/EditModeProvider';
 import { ImageLayerContext } from '../../context/ImageLayerProvider';
-import { ImageContext } from '../../context/ImageProvider';
 
 const ImageDrawLayer = () => {
-  const { drawLayer } = useContext(ImageLayerContext);
+  const { previewLayer, dragLayer, drawLayer } = useContext(ImageLayerContext);
   const { range, color, penType } = useContext(DrawContext);
-  const { imageSize } = useContext(ImageContext);
-  const { editMode } = useContext(EditModeContext);
 
-  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
-  const [canvasCtx, setCanvasCtx] = useState<CanvasRenderingContext2D | null>(
-    null
+  const initDraw = useCallback(
+    (e: MouseEvent) => {
+      if (!previewLayer?.current) return;
+
+      const canvas = previewLayer.current;
+      const context = canvas.getContext('2d');
+
+      if (!context) return;
+      context.lineCap = 'round';
+      context.lineWidth = range;
+      context.strokeStyle = color;
+      context.beginPath();
+      context.lineTo(e.offsetX, e.offsetY);
+      context.stroke();
+    },
+    [color, range, previewLayer]
   );
 
-  // Draw Layer 생성
-  useEffect(() => {
-    if (!drawLayer?.current || editMode !== 'Draw' || !imageSize) return;
-    const canvas = drawLayer.current;
-    const context = canvas.getContext('2d');
-    canvas.width = imageSize.width;
-    canvas.height = imageSize.height;
+  const draw = useCallback(
+    (e: MouseEvent) => {
+      if (!previewLayer?.current) return;
 
-    setCanvas(canvas);
-    setCanvasCtx(context);
+      const canvas = previewLayer.current;
+      const context = canvas.getContext('2d');
+
+      if (!context) return;
+
+      if (e.buttons === 1) {
+        if (penType === 'Free') {
+          context.lineTo(e.offsetX, e.offsetY);
+          context.stroke();
+        }
+        return;
+      }
+      context.beginPath();
+      context.moveTo(e.offsetX, e.offsetY);
+    },
+    [penType, previewLayer]
+  );
+
+  useEffect(() => {
+    const canvas = dragLayer?.current;
+    if (!canvas) return;
+    canvas.addEventListener('mousedown', initDraw);
+    canvas.addEventListener('mousemove', draw);
 
     return () => {
-      const context = canvas.getContext('2d');
-      if (!context) return;
-      context.clearRect(0, 0, imageSize.width, imageSize.height);
+      canvas.removeEventListener('mousemove', draw);
+      canvas.removeEventListener('mousedown', initDraw);
     };
-  }, [imageSize, drawLayer, editMode]);
+  }, [draw, dragLayer, initDraw]);
 
-  const onMouseDownHandler = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!canvasCtx || !canvas) return;
-    const canvasPosition = canvas.getBoundingClientRect();
-    const x = e.clientX - canvasPosition.x;
-    const y = e.clientY - canvasPosition.y;
-
-    canvasCtx.lineCap = 'round';
-    canvasCtx.lineWidth = range;
-    canvasCtx.strokeStyle = color;
-    canvasCtx.beginPath();
-    if (penType === 'Pen') {
-      canvasCtx.lineTo(x, y);
-      canvasCtx.stroke();
-    } else {
-      canvasCtx.clearRect(x, y, range, range);
-    }
-  };
-  const onMouseUpHander = () => {
-    if (!canvasCtx) return;
-    canvasCtx.closePath();
-  };
-  const onMouseMoveHandler = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!canvasCtx || !canvas) return;
-    const canvasPosition = canvas.getBoundingClientRect();
-
-    const x = e.clientX - canvasPosition.x;
-    const y = e.clientY - canvasPosition.y;
-    if (e.buttons === 1) {
-      if (penType === 'Pen') {
-        canvasCtx.lineTo(x, y);
-        canvasCtx.stroke();
-      } else {
-        canvasCtx.clearRect(x, y, range, range);
-      }
-      return;
-    }
-    canvasCtx.moveTo(x, y);
-  };
-  return (
-    <canvas
-      className="absolute top-0 z-40"
-      ref={drawLayer}
-      onMouseDown={onMouseDownHandler}
-      onMouseUp={onMouseUpHander}
-      onMouseMove={onMouseMoveHandler}
-    />
-  );
+  return <canvas className="absolute top-0" ref={drawLayer} />;
 };
 
 export default ImageDrawLayer;

@@ -14,7 +14,7 @@ export const DrawContext = createContext<IDrawContext>({
   setColor: () => {},
   range: 10,
   setRange: () => {},
-  penType: 'Pen',
+  penType: 'Free',
   setPenType: () => {},
 });
 
@@ -25,7 +25,7 @@ interface Props {
 const DrawProvider = ({ children }: Props) => {
   const [color, setColor] = useState('#000000');
   const [range, setRange] = useState(10);
-  const [penType, setPenType] = useState('Pen');
+  const [penType, setPenType] = useState('Free');
   const drawContextValue = useMemo(() => {
     return {
       color,
