@@ -10,11 +10,11 @@ interface Props {
   imageUrl: string;
 }
 const ImageEditor = ({ imageUrl }: Props) => {
-  const { image, setImage } = useContext(ImageContext);
+  const { image, initImage } = useContext(ImageContext);
 
   useEffect(() => {
-    setImage(imageUrl);
-  }, [imageUrl, setImage]);
+    initImage(imageUrl);
+  }, [imageUrl, initImage]);
 
   return (
     <div className="w-full max-w-screen-lg pt-2 ">

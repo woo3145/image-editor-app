@@ -14,6 +14,7 @@ const ImageDrawLayer = () => {
       const context = canvas.getContext('2d');
 
       if (!context) return;
+      context.save();
       context.lineCap = 'round';
       context.lineWidth = range;
       context.strokeStyle = color;

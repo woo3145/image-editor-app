@@ -27,8 +27,11 @@
   - [x] Draw Submenu UI (자유/직선, 색, 두께, 초기화) (Context API 사용)
   - [x] 자유선 (PreviewLayer에 바로 그림)
   - [ ] 직선 (마우스를 땔때까지 직선의 경로가 정해진게 아님으로 DrawLayer에 미리 표시 후 마우스를 땔때 previewLayer에 그려줘야할듯)
-  - [ ] 한번의 드로잉 단위로 되돌리기 (Canvas API - save, restore)
-    - DragArea의 x,y 가 변경 될 때 save
+
+- 이전, 이후로 되돌리기 기능 (이미지 히스토리 스택 구현 Context와 Hook 이용)
+
+  - [x] Crop
+  - [ ] Draw
 
 - [ ] 이미지 가져오기 기능 (현재 샘플이미지)
 
