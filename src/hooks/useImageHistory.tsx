@@ -19,7 +19,7 @@ const useImageHistory = () => {
     setHistoryLength(1);
     setHistory([{ image, imageSize }]);
   };
-  const save = () => {
+  const save = (img: HTMLImageElement) => {
     if (!image || !imageSize) return;
     if (
       history === null ||
@@ -32,7 +32,11 @@ const useImageHistory = () => {
       return;
     setHistoryIdx(historyIdx + 1);
     setHistoryLength(historyIdx + 2);
-    setHistory([...history, { image, imageSize }]);
+    setHistory([
+      ...history.slice(0, historyIdx + 1),
+      { image: img, imageSize },
+    ]);
+    console.log('SAVE');
   };
   const prev = () => {
     if (

@@ -1,10 +1,12 @@
 import { useCallback, useContext, useEffect } from 'react';
 import { DrawContext } from '../../context/DrawProvider';
 import { ImageLayerContext } from '../../context/ImageLayerProvider';
+import useImageHistory from '../../hooks/useImageHistory';
 
 const ImageDrawLayer = () => {
   const { previewLayer, dragLayer, drawLayer } = useContext(ImageLayerContext);
   const { range, color, penType } = useContext(DrawContext);
+  const { save } = useImageHistory();
 
   const initDraw = useCallback(
     (e: MouseEvent) => {
@@ -14,7 +16,6 @@ const ImageDrawLayer = () => {
       const context = canvas.getContext('2d');
 
       if (!context) return;
-      context.save();
       context.lineCap = 'round';
       context.lineWidth = range;
       context.strokeStyle = color;
@@ -47,17 +48,34 @@ const ImageDrawLayer = () => {
     [penType, previewLayer]
   );
 
+  const endDraw = useCallback(
+    (e: MouseEvent) => {
+      if (!previewLayer?.current) return;
+
+      const canvas = previewLayer.current;
+      const context = canvas.getContext('2d');
+
+      if (!context) return;
+      const imageEl = new Image();
+      imageEl.src = canvas.toDataURL();
+      save(imageEl);
+    },
+    [save, previewLayer]
+  );
+
   useEffect(() => {
     const canvas = dragLayer?.current;
     if (!canvas) return;
     canvas.addEventListener('mousedown', initDraw);
     canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', endDraw);
 
     return () => {
       canvas.removeEventListener('mousemove', draw);
       canvas.removeEventListener('mousedown', initDraw);
+      canvas.removeEventListener('mouseup', endDraw);
     };
-  }, [draw, dragLayer, initDraw]);
+  }, [draw, dragLayer, initDraw, endDraw]);
 
   return <canvas className="absolute top-0" ref={drawLayer} />;
 };
