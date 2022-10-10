@@ -16,7 +16,7 @@ function App() {
 
   return (
     <div className="font-light tracking-wider">
-      <Header />
+      <Header setImageUrl={setImageUrl} />
       <div className="max-w-screen-2xl mx-auto py-8 flex flex-col items-center">
         <EditModeProvider>
           <Controller />
