@@ -56,6 +56,7 @@ const ImageProvider = ({ children }: Props) => {
     height: 0,
   });
   const [image, _setImage] = useState<HTMLImageElement | null>(null);
+
   const [history, setHistory] = useState<IImageHistory[]>([]);
   const [historyIdx, setHistoryIdx] = useState<number>(0);
   const [historyLength, setHistoryLength] = useState<number>(0);

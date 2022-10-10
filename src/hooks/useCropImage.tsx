@@ -5,14 +5,18 @@ import { ImageLayerContext } from '../context/ImageLayerProvider';
 import { ImageContext } from '../context/ImageProvider';
 
 const useCropImage = () => {
-  const { dragArea, resetDragArea } = useContext(DragAreaContext);
+  const { dragArea, resetDragArea, isEmpty } = useContext(DragAreaContext);
   const { previewLayer } = useContext(ImageLayerContext);
   const { setEditMode } = useContext(EditModeContext);
   const { setImage } = useContext(ImageContext);
 
   const onClickApply = useCallback(() => {
-    if (!previewLayer?.current || !dragArea || !resetDragArea) return;
-
+    if (!previewLayer?.current || !dragArea || !resetDragArea || !setEditMode)
+      return;
+    if (isEmpty) {
+      setEditMode('None');
+      return;
+    }
     const previewCanvas = previewLayer.current;
     const previewContext = previewCanvas.getContext('2d');
 
@@ -31,7 +35,9 @@ const useCropImage = () => {
 
     resetDragArea();
     setImage(previewCanvas.toDataURL('image/jpeg'));
-  }, [dragArea, resetDragArea, previewLayer, setImage]);
+
+    setEditMode('None');
+  }, [dragArea, isEmpty, resetDragArea, previewLayer, setImage, setEditMode]);
 
   const onClickCancel = useCallback(() => {
     if (!resetDragArea || !setEditMode) return;

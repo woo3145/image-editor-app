@@ -9,7 +9,7 @@ const ImageDrawLayer = () => {
   const { editMode } = useContext(EditModeContext);
   const { previewLayer, dragLayer, drawLayer } = useContext(ImageLayerContext);
   const { range, color, penType } = useContext(DrawContext);
-  const { imageSize } = useContext(ImageContext);
+  const { imageSize, setImage } = useContext(ImageContext);
   const { save } = useImageHistory();
   const [mousePoint, setMousePoint] = useState({ x: 0, y: 0, w: 0, h: 0 });
   const [isPainting, setIsPainting] = useState(false);
@@ -124,8 +124,9 @@ const ImageDrawLayer = () => {
       const imageEl = new Image();
       imageEl.src = canvas.toDataURL();
       save(imageEl);
+      setImage(canvas.toDataURL('image/jpeg'));
     },
-    [save, previewLayer, penType, mousePoint, color, range]
+    [save, setImage, previewLayer, penType, mousePoint, color, range]
   );
 
   useEffect(() => {

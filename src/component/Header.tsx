@@ -1,16 +1,28 @@
-import { ChangeEvent, Dispatch } from 'react';
+import { ChangeEvent, Dispatch, useContext } from 'react';
+import { ImageContext } from '../context/ImageProvider';
 
 interface Props {
   setImageUrl: Dispatch<React.SetStateAction<string>>;
 }
 
 const Header = ({ setImageUrl }: Props) => {
+  const { image } = useContext(ImageContext);
+
   const onChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length) {
       const file = e.target.files;
       const fileUrl = URL.createObjectURL(file[0]);
       setImageUrl(fileUrl);
     }
+  };
+  const downloadImage = () => {
+    if (!image) return;
+    const aElement = document.createElement('a');
+    aElement.href = image.src;
+    const date = new Date();
+    aElement.download = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    aElement.click();
+    aElement.remove();
   };
   return (
     <header className="w-full py-4 border-b">
@@ -32,7 +44,10 @@ const Header = ({ setImageUrl }: Props) => {
             이미지 가져오기
           </label>
 
-          <div className="px-4 py-2 bg-blue-900 rounded-md text-white cursor-pointer hover:bg-blue-800 duration-200">
+          <div
+            onClick={downloadImage}
+            className="px-4 py-2 bg-blue-900 rounded-md text-white cursor-pointer hover:bg-blue-800 duration-200"
+          >
             다운로드
           </div>
         </div>
