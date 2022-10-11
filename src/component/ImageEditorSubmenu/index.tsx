@@ -3,6 +3,7 @@ import { EditModeContext } from '../../context/EditModeProvider';
 import useImageHistory from '../../hooks/useImageHistory';
 import CropSubmenu from './CropSubmenu';
 import DrawSubmenu from './DrawSubmenu';
+import RotateSubmenu from './RotateSubmenu';
 
 const ImageEditorSubmenu = () => {
   const { editMode } = useContext(EditModeContext);
@@ -12,6 +13,7 @@ const ImageEditorSubmenu = () => {
     <div className="py-6 mx-auto">
       {editMode === 'Crop' && <CropSubmenu />}
       {editMode === 'Draw' && <DrawSubmenu />}
+      {editMode === 'Rotate' && <RotateSubmenu />}
       <div onClick={prev} className="cursor-pointer">
         이전
       </div>
