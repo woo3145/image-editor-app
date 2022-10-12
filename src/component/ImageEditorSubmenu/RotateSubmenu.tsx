@@ -1,8 +1,16 @@
+import { useContext } from 'react';
 import { GrRotateLeft, GrRotateRight } from 'react-icons/gr';
+import { ImageLayerContext } from '../../context/ImageLayerProvider';
 
 const RotateSubmenu = () => {
-  const rotateRight = () => {};
-  const rotateLeft = () => {};
+  const { degree, setDegree } = useContext(ImageLayerContext);
+  const rotateRight = () => {
+    setDegree(degree === 270 ? 0 : degree + 90);
+  };
+  const rotateLeft = () => {
+    setDegree(degree === 0 ? 360 - 90 : degree - 90);
+  };
+
   return (
     <div className="flex flex-col items-center">
       <div className="flex gap-7">

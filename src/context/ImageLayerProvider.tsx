@@ -1,10 +1,21 @@
-import { createContext, ReactNode, RefObject, useMemo, useRef } from 'react';
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  RefObject,
+  SetStateAction,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 interface IImageLayerContext {
   previewLayer: RefObject<HTMLCanvasElement> | null;
   dragLayer: RefObject<HTMLCanvasElement> | null;
   cropLayer: RefObject<HTMLCanvasElement> | null;
   drawLayer: RefObject<HTMLCanvasElement> | null;
+  degree: number;
+  setDegree: Dispatch<SetStateAction<number>>;
 }
 
 export const ImageLayerContext = createContext<IImageLayerContext>({
@@ -12,6 +23,8 @@ export const ImageLayerContext = createContext<IImageLayerContext>({
   dragLayer: null,
   cropLayer: null,
   drawLayer: null,
+  degree: 0,
+  setDegree: () => null,
 });
 
 interface Props {
@@ -24,14 +37,18 @@ const ImageLayerProvider = ({ children }: Props) => {
   const cropLayer = useRef(null);
   const drawLayer = useRef(null);
 
+  const [degree, setDegree] = useState(0);
+
   const imageLayerContextValue = useMemo(() => {
     return {
       previewLayer,
       dragLayer,
       cropLayer,
       drawLayer,
+      degree,
+      setDegree,
     };
-  }, [previewLayer]);
+  }, [previewLayer, degree, setDegree]);
 
   return (
     <ImageLayerContext.Provider value={imageLayerContextValue}>
