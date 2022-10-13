@@ -4,31 +4,37 @@ import { EditModeContext } from '../../context/EditModeProvider';
 import { ImageLayerContext } from '../../context/ImageLayerProvider';
 import { ImageContext } from '../../context/ImageProvider';
 import useImageHistory from '../../hooks/useImageHistory';
+import { resizeImage } from '../../utils/imageUtils';
 
 const ImageDrawLayer = () => {
   const { editMode } = useContext(EditModeContext);
-  const { previewLayer, dragLayer, drawLayer } = useContext(ImageLayerContext);
+  const { previewLayer, dragLayer, drawLayer, degree } =
+    useContext(ImageLayerContext);
   const { range, color, penType } = useContext(DrawContext);
-  const { imageSize, setImage } = useContext(ImageContext);
+  const { setImage, image } = useContext(ImageContext);
   const { save } = useImageHistory();
   const [mousePoint, setMousePoint] = useState({ x: 0, y: 0, w: 0, h: 0 });
   const [isPainting, setIsPainting] = useState(false);
 
   useEffect(() => {
-    if (!drawLayer?.current || !imageSize || editMode !== 'Draw') return;
+    if (!image || !drawLayer?.current || editMode !== 'Draw') return;
     const canvas = drawLayer.current;
-    canvas.width = imageSize.width;
-    canvas.height = imageSize.height;
-  }, [imageSize, drawLayer, editMode]);
+    const imageSize = resizeImage(image);
+    const width = degree % 180 ? imageSize.height : imageSize.width;
+    const height = degree % 180 ? imageSize.width : imageSize.height;
+    canvas.width = width;
+    canvas.height = height;
+  }, [drawLayer, editMode, degree, image]);
 
   const initDraw = useCallback(
     (e: MouseEvent) => {
-      if (!previewLayer?.current) return;
+      if (!previewLayer?.current || !image) return;
       setIsPainting(true);
 
       const canvas = previewLayer.current;
       const context = canvas.getContext('2d');
 
+      const imageSize = resizeImage(image);
       if (!context) return;
       context.lineCap = 'round';
       context.lineWidth = range;
@@ -45,17 +51,18 @@ const ImageDrawLayer = () => {
         drawContext.clearRect(
           0,
           0,
-          imageSize?.width || 0,
-          imageSize?.height || 0
+          imageSize.width || 0,
+          imageSize.height || 0
         );
       }
       setMousePoint({ x: e.offsetX, y: e.offsetY, w: 0, h: 0 });
     },
-    [previewLayer, setMousePoint, drawLayer, penType, imageSize, color, range]
+    [previewLayer, setMousePoint, drawLayer, penType, color, range, image]
   );
 
   const draw = useCallback(
     (e: MouseEvent) => {
+      if (!image) return;
       let canvas: null | HTMLCanvasElement = null;
       let context: CanvasRenderingContext2D | null = null;
       if (penType === 'Free') {
@@ -70,6 +77,7 @@ const ImageDrawLayer = () => {
 
       if (!context) return;
 
+      const imageSize = resizeImage(image);
       if (e.buttons === 1) {
         context.lineCap = 'round';
         context.lineWidth = range;
@@ -79,17 +87,11 @@ const ImageDrawLayer = () => {
           context.lineTo(e.offsetX, e.offsetY);
           context.stroke();
         } else if (penType === 'Straight') {
-          context.clearRect(
-            0,
-            0,
-            imageSize?.width || 0,
-            imageSize?.height || 0
-          );
+          context.clearRect(0, 0, imageSize.width || 0, imageSize.height || 0);
           context.beginPath();
           context.moveTo(mousePoint.x, mousePoint.y);
           context.lineTo(e.offsetX, e.offsetY);
           context.stroke();
-          context.save();
           setMousePoint({ ...mousePoint, w: e.offsetX, h: e.offsetY });
         }
         return;
@@ -100,7 +102,7 @@ const ImageDrawLayer = () => {
         context.moveTo(e.offsetX, e.offsetY);
       }
     },
-    [penType, previewLayer, drawLayer, mousePoint, imageSize, color, range]
+    [penType, previewLayer, drawLayer, mousePoint, image, color, range]
   );
 
   const endDraw = useCallback(

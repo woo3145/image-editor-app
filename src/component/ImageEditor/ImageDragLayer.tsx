@@ -3,26 +3,30 @@ import { DragAreaContext } from '../../context/DragAreaProvider';
 import { EditModeContext } from '../../context/EditModeProvider';
 import { ImageLayerContext } from '../../context/ImageLayerProvider';
 import { ImageContext } from '../../context/ImageProvider';
+import { resizeImage } from '../../utils/imageUtils';
 
 const ImageDragLayer = () => {
-  const { dragLayer } = useContext(ImageLayerContext);
+  const { dragLayer, degree } = useContext(ImageLayerContext);
   const { setDragArea, resetDragArea } = useContext(DragAreaContext);
   const { editMode } = useContext(EditModeContext);
-  const { image, imageSize } = useContext(ImageContext);
+  const { image } = useContext(ImageContext);
 
   // Drag Layer 생성
   useEffect(() => {
-    if (!dragLayer?.current || editMode === 'None' || !imageSize) return;
+    if (!dragLayer?.current || editMode === 'None' || !image) return;
     const canvas = dragLayer.current;
 
-    canvas.width = imageSize.width;
-    canvas.height = imageSize.height;
+    const imageSize = resizeImage(image);
+    const width = degree % 180 ? imageSize.height : imageSize.width;
+    const height = degree % 180 ? imageSize.width : imageSize.height;
+    canvas.width = width;
+    canvas.height = height;
 
     // EditMode가 끝나거나 이미지가 변경되면 실행됨
     return () => {
       resetDragArea();
     };
-  }, [imageSize, image, dragLayer, editMode, resetDragArea]);
+  }, [image, dragLayer, editMode, resetDragArea, degree]);
 
   const onMouseDownHandler = ({
     buttons,

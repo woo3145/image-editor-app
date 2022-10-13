@@ -38,3 +38,7 @@
 - [x] Rotate 기능 (이미지 회전)
 
 - [x] 이미지 저장 기능
+
+### Bugs
+
+- [x] 1. 이미지 회전 후 draw시 이미지가 돌아감 (layer context에서 image변경 시 degree 초기화로 해결)

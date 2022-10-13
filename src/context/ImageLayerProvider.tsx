@@ -4,10 +4,13 @@ import {
   ReactNode,
   RefObject,
   SetStateAction,
+  useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
+import { ImageContext } from './ImageProvider';
 
 interface IImageLayerContext {
   previewLayer: RefObject<HTMLCanvasElement> | null;
@@ -32,12 +35,17 @@ interface Props {
 }
 
 const ImageLayerProvider = ({ children }: Props) => {
+  const { image } = useContext(ImageContext);
   const previewLayer = useRef(null);
   const dragLayer = useRef(null);
   const cropLayer = useRef(null);
   const drawLayer = useRef(null);
 
   const [degree, setDegree] = useState(0);
+
+  useEffect(() => {
+    setDegree(0);
+  }, [image]);
 
   const imageLayerContextValue = useMemo(() => {
     return {

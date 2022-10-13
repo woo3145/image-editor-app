@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { ImageContext, ImageHistoryContext } from '../context/ImageProvider';
 
 const useImageHistory = () => {
-  const { image, setImage, imageSize } = useContext(ImageContext);
+  const { image, setImage } = useContext(ImageContext);
   const {
     history,
     setHistory,
@@ -13,14 +13,14 @@ const useImageHistory = () => {
   } = useContext(ImageHistoryContext);
 
   const initHistory = () => {
-    if (!image || !imageSize) return;
+    if (!image) return;
     if (!history || !setHistory || !setHistoryIdx || !setHistoryLength) return;
     setHistoryIdx(0);
     setHistoryLength(1);
-    setHistory([{ image, imageSize }]);
+    setHistory([{ image }]);
   };
   const save = (img: HTMLImageElement) => {
-    if (!image || !imageSize) return;
+    if (!image) return;
     if (
       history === null ||
       !setHistory ||
@@ -32,10 +32,7 @@ const useImageHistory = () => {
       return;
     setHistoryIdx(historyIdx + 1);
     setHistoryLength(historyIdx + 2);
-    setHistory([
-      ...history.slice(0, historyIdx + 1),
-      { image: img, imageSize },
-    ]);
+    setHistory([...history.slice(0, historyIdx + 1), { image: img }]);
     console.log('SAVE');
   };
   const prev = () => {

@@ -32,13 +32,15 @@ const Header = ({ setImageUrl }: Props) => {
         </p>
         <div className="flex gap-4">
           <input
-            onChange={onChangeFile}
             type="file"
-            id="image"
+            name="input-image"
+            id="input-image"
+            accept="image/*"
             className="invisible"
+            onChange={onChangeFile}
           />
           <label
-            htmlFor="image"
+            htmlFor="input-image"
             className="px-4 py-2 border border-blue-900 rounded-md cursor-pointer hover:bg-gray-100 duration-200"
           >
             이미지 가져오기
