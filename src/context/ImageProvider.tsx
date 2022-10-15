@@ -22,8 +22,6 @@ interface IImageContext {
 interface IImageHistoryContext {
   historyIdx: number | null;
   setHistoryIdx: Dispatch<React.SetStateAction<number>> | null;
-  historyLength: number | null;
-  setHistoryLength: Dispatch<React.SetStateAction<number>> | null;
   history: IImageHistory[] | null;
   setHistory: Dispatch<React.SetStateAction<IImageHistory[]>> | null;
 }
@@ -36,8 +34,6 @@ export const ImageContext = createContext<IImageContext>({
 export const ImageHistoryContext = createContext<IImageHistoryContext>({
   historyIdx: null,
   setHistoryIdx: null,
-  historyLength: null,
-  setHistoryLength: null,
   history: null,
   setHistory: null,
 });
@@ -51,7 +47,6 @@ const ImageProvider = ({ children }: Props) => {
 
   const [history, setHistory] = useState<IImageHistory[]>([]);
   const [historyIdx, setHistoryIdx] = useState<number>(0);
-  const [historyLength, setHistoryLength] = useState<number>(0);
 
   const setImage = useCallback(
     (image: string | HTMLImageElement) => {
@@ -63,13 +58,11 @@ const ImageProvider = ({ children }: Props) => {
           _setImage(imageEl);
           setHistory([...history.slice(0, historyIdx + 1), { image: imageEl }]);
           setHistoryIdx(historyIdx + 1);
-          setHistoryLength(historyIdx + 2);
         };
       } else {
         _setImage(image);
         setHistory([...history.slice(0, historyIdx + 1), { image }]);
         setHistoryIdx(historyIdx + 1);
-        setHistoryLength(historyIdx + 2);
       }
     },
     [history, setHistory, historyIdx]
@@ -84,13 +77,11 @@ const ImageProvider = ({ children }: Props) => {
         _setImage(imageEl);
         setHistory([{ image: imageEl }]);
         setHistoryIdx(0);
-        setHistoryLength(1);
       };
     } else {
       _setImage(image);
       setHistory([{ image }]);
       setHistoryIdx(0);
-      setHistoryLength(1);
     }
   }, []);
 
@@ -108,17 +99,8 @@ const ImageProvider = ({ children }: Props) => {
       setHistory,
       historyIdx,
       setHistoryIdx,
-      historyLength,
-      setHistoryLength,
     };
-  }, [
-    history,
-    setHistory,
-    historyIdx,
-    setHistoryIdx,
-    historyLength,
-    setHistoryLength,
-  ]);
+  }, [history, setHistory, historyIdx, setHistoryIdx]);
 
   return (
     <ImageContext.Provider value={imageContextValue}>

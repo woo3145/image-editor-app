@@ -2,18 +2,19 @@ import { useContext } from 'react';
 import { ImageHistoryContext } from '../context/ImageProvider';
 
 const useImageHistory = () => {
-  const { history, historyIdx, setHistoryIdx, historyLength } =
+  const { history, historyIdx, setHistoryIdx } =
     useContext(ImageHistoryContext);
 
   const prev = () => {
-    if (!setHistoryIdx || historyIdx === null) return;
+    if (setHistoryIdx === null || historyIdx === null) return;
     if (historyIdx < 1) return;
 
     setHistoryIdx(historyIdx - 1);
   };
   const next = () => {
-    if (!setHistoryIdx || historyIdx === null || historyLength === null) return;
-    if (historyIdx >= historyLength - 1) return;
+    if (setHistoryIdx === null || historyIdx === null || history === null)
+      return;
+    if (historyIdx >= history.length - 1) return;
 
     setHistoryIdx(historyIdx + 1);
   };

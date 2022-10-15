@@ -36,10 +36,10 @@ interface Props {
 
 const ImageLayerProvider = ({ children }: Props) => {
   const { image } = useContext(ImageContext);
-  const previewLayer = useRef(null);
-  const dragLayer = useRef(null);
-  const cropLayer = useRef(null);
-  const drawLayer = useRef(null);
+  const previewLayer = useRef<HTMLCanvasElement>(null);
+  const dragLayer = useRef<HTMLCanvasElement>(null);
+  const cropLayer = useRef<HTMLCanvasElement>(null);
+  const drawLayer = useRef<HTMLCanvasElement>(null);
 
   const [degree, setDegree] = useState(0);
 

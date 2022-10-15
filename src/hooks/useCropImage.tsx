@@ -35,7 +35,6 @@ const useCropImage = () => {
 
     resetDragArea();
     setImage(previewCanvas.toDataURL('image/jpeg'));
-
     setEditMode('None');
   }, [dragArea, isEmpty, resetDragArea, previewLayer, setImage, setEditMode]);
 
