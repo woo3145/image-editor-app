@@ -3,7 +3,6 @@ import { DrawContext } from '../../context/DrawProvider';
 import { EditModeContext } from '../../context/EditModeProvider';
 import { ImageLayerContext } from '../../context/ImageLayerProvider';
 import { ImageContext } from '../../context/ImageProvider';
-import useImageHistory from '../../hooks/useImageHistory';
 import { resizeImage } from '../../utils/imageUtils';
 
 const ImageDrawLayer = () => {
@@ -12,7 +11,6 @@ const ImageDrawLayer = () => {
     useContext(ImageLayerContext);
   const { range, color, penType } = useContext(DrawContext);
   const { setImage, image } = useContext(ImageContext);
-  const { save } = useImageHistory();
   const [mousePoint, setMousePoint] = useState({ x: 0, y: 0, w: 0, h: 0 });
   const [isPainting, setIsPainting] = useState(false);
 
@@ -125,10 +123,9 @@ const ImageDrawLayer = () => {
 
       const imageEl = new Image();
       imageEl.src = canvas.toDataURL();
-      save(imageEl);
       setImage(canvas.toDataURL('image/jpeg'));
     },
-    [save, setImage, previewLayer, penType, mousePoint, color, range]
+    [setImage, previewLayer, penType, mousePoint, color, range]
   );
 
   useEffect(() => {

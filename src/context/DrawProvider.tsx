@@ -1,12 +1,18 @@
 import { createContext, Dispatch, ReactNode, useMemo, useState } from 'react';
 
+export type PenType = 'Free' | 'Straight';
+
+export const isPenType = (mode: string): mode is PenType => {
+  return ['Free', 'Straight'].includes(mode);
+};
+
 interface IDrawContext {
   color: string;
   setColor: Dispatch<React.SetStateAction<string>> | null;
   range: number;
   setRange: Dispatch<React.SetStateAction<number>> | null;
-  penType: string;
-  setPenType: Dispatch<React.SetStateAction<string>> | null;
+  penType: PenType;
+  setPenType: Dispatch<React.SetStateAction<PenType>> | null;
 }
 
 export const DrawContext = createContext<IDrawContext>({
@@ -25,7 +31,7 @@ interface Props {
 const DrawProvider = ({ children }: Props) => {
   const [color, setColor] = useState('#000000');
   const [range, setRange] = useState(10);
-  const [penType, setPenType] = useState('Free');
+  const [penType, setPenType] = useState<PenType>('Free');
   const drawContextValue = useMemo(() => {
     return {
       color,

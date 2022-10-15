@@ -67,6 +67,9 @@ const ImageProvider = ({ children }: Props) => {
         };
       } else {
         _setImage(image);
+        setHistory([...history.slice(0, historyIdx + 1), { image }]);
+        setHistoryIdx(historyIdx + 1);
+        setHistoryLength(historyIdx + 2);
       }
     },
     [history, setHistory, historyIdx]
@@ -85,16 +88,19 @@ const ImageProvider = ({ children }: Props) => {
       };
     } else {
       _setImage(image);
+      setHistory([{ image }]);
+      setHistoryIdx(0);
+      setHistoryLength(1);
     }
   }, []);
 
   const imageContextValue = useMemo(() => {
     return {
-      image,
+      image: history[historyIdx]?.image || image,
       setImage,
       initImage,
     };
-  }, [image, setImage, initImage]);
+  }, [setImage, initImage, history, historyIdx, image]);
 
   const imageHistoryContextValue = useMemo(() => {
     return {
