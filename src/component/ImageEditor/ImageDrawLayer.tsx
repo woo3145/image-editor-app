@@ -17,9 +17,9 @@ const ImageDrawLayer = () => {
   useEffect(() => {
     if (!image || !drawLayer?.current || editMode !== 'Draw') return;
     const canvas = drawLayer.current;
-    const imageSize = resizeImage(image, degree);
-    canvas.width = imageSize.width;
-    canvas.height = imageSize.height;
+    const { width, height } = resizeImage(image, degree);
+    canvas.width = width;
+    canvas.height = height;
   }, [drawLayer, editMode, degree, image]);
 
   const initDraw = useCallback(
@@ -30,11 +30,13 @@ const ImageDrawLayer = () => {
       const canvas = previewLayer.current;
       const context = canvas.getContext('2d');
 
-      const resizedImage = resizeImage(image, degree);
+      const { width, height } = resizeImage(image, degree);
       if (!context) return;
       context.lineCap = 'round';
       context.lineWidth = range;
       context.strokeStyle = color;
+
+      // 점찍기
       context.beginPath();
       context.lineTo(e.offsetX, e.offsetY);
       context.stroke();
@@ -44,14 +46,9 @@ const ImageDrawLayer = () => {
         const drawCanvas = drawLayer.current;
         const drawContext = drawCanvas.getContext('2d');
         if (!drawContext) return;
-        drawContext.clearRect(
-          0,
-          0,
-          resizedImage.width || 0,
-          resizedImage.height || 0
-        );
+        drawContext.clearRect(0, 0, width, height);
+        setMousePoint({ x: e.offsetX, y: e.offsetY, w: 0, h: 0 });
       }
-      setMousePoint({ x: e.offsetX, y: e.offsetY, w: 0, h: 0 });
     },
     [
       previewLayer,
@@ -67,7 +64,7 @@ const ImageDrawLayer = () => {
 
   const draw = useCallback(
     (e: MouseEvent) => {
-      if (!image) return;
+      if (!image || !isPainting) return;
       let canvas: null | HTMLCanvasElement = null;
       let context: CanvasRenderingContext2D | null = null;
       if (penType === 'Free') {
@@ -80,79 +77,98 @@ const ImageDrawLayer = () => {
         context = canvas.getContext('2d');
       }
 
-      if (!context) return;
+      if (!context || !canvas) return;
+      const canvasPosition = canvas.getBoundingClientRect();
 
-      const imageSize = resizeImage(image, degree);
+      const { width, height } = resizeImage(image, degree);
       if (e.buttons === 1) {
         context.lineCap = 'round';
         context.lineWidth = range;
         context.strokeStyle = color;
-        setIsPainting(true);
+        const x = e.clientX - canvasPosition.x;
+        const y = e.clientY - canvasPosition.y;
         if (penType === 'Free') {
-          context.lineTo(e.offsetX, e.offsetY);
-          context.stroke();
+          if (
+            canvasPosition.x < e.clientX ||
+            canvasPosition.x + canvasPosition.width > e.clientX ||
+            canvasPosition.y < e.clientY ||
+            canvasPosition.y + canvasPosition.height > e.clientY
+          ) {
+            context.lineTo(x, y);
+            context.stroke();
+          }
         } else if (penType === 'Straight') {
-          context.clearRect(0, 0, imageSize.width || 0, imageSize.height || 0);
+          context.clearRect(0, 0, width, height);
           context.beginPath();
           context.moveTo(mousePoint.x, mousePoint.y);
-          context.lineTo(e.offsetX, e.offsetY);
+          context.lineTo(x, y);
           context.stroke();
-          setMousePoint({ ...mousePoint, w: e.offsetX, h: e.offsetY });
+          setMousePoint({
+            ...mousePoint,
+            w: x,
+            h: y,
+          });
         }
         return;
       }
-
-      if (penType === 'Free') {
-        context.beginPath();
-        context.moveTo(e.offsetX, e.offsetY);
-      }
     },
-    [penType, previewLayer, drawLayer, mousePoint, image, color, range, degree]
+    [
+      penType,
+      previewLayer,
+      drawLayer,
+      mousePoint,
+      image,
+      color,
+      range,
+      degree,
+      isPainting,
+    ]
   );
 
   const endDraw = useCallback(
     (e: MouseEvent) => {
-      if (!previewLayer?.current) return;
+      if (isPainting === false) return;
+      console.log('End Draw');
       setIsPainting(false);
+      if (!previewLayer?.current) return;
       const canvas = previewLayer.current;
       const context = canvas.getContext('2d');
       if (!context) return;
 
+      // 직선펜이면 Preview Layer에 그려진 선을 옮겨줌
       if (penType === 'Straight') {
         context.lineCap = 'round';
         context.lineWidth = range;
         context.strokeStyle = color;
         context.beginPath();
         context.moveTo(mousePoint.x, mousePoint.y);
-        context.lineTo(e.offsetX, e.offsetY);
+        context.lineTo(
+          mousePoint.w === 0 ? mousePoint.x : mousePoint.w,
+          mousePoint.h === 0 ? mousePoint.y : mousePoint.h
+        );
         context.stroke();
+        setMousePoint({ x: 0, y: 0, w: 0, h: 0 });
       }
 
       const imageEl = new Image();
       imageEl.src = canvas.toDataURL();
       setImage(canvas.toDataURL('image/jpeg'));
     },
-    [setImage, previewLayer, penType, mousePoint, color, range]
+    [setImage, previewLayer, penType, mousePoint, color, range, isPainting]
   );
 
   useEffect(() => {
     if (editMode !== 'Draw') return;
     const canvas = dragLayer?.current;
     if (!canvas) return;
-    const onMouseLeaveHandler = (e: MouseEvent) => {
-      if (!isPainting) return;
-      endDraw(e);
-    };
     canvas.addEventListener('mousedown', initDraw);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', endDraw);
-    canvas.addEventListener('mouseleave', onMouseLeaveHandler);
+    document.addEventListener('mousemove', draw);
+    document.addEventListener('mouseup', endDraw);
 
     return () => {
-      canvas.removeEventListener('mousemove', draw);
       canvas.removeEventListener('mousedown', initDraw);
-      canvas.removeEventListener('mouseup', endDraw);
-      canvas.removeEventListener('mouseleave', onMouseLeaveHandler);
+      document.removeEventListener('mousemove', draw);
+      document.removeEventListener('mouseup', endDraw);
     };
   }, [draw, dragLayer, initDraw, endDraw, editMode, isPainting]);
 
