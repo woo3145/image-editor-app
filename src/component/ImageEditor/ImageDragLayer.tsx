@@ -16,11 +16,9 @@ const ImageDragLayer = () => {
     if (!dragLayer?.current || editMode === 'None' || !image) return;
     const canvas = dragLayer.current;
 
-    const imageSize = resizeImage(image);
-    const width = degree % 180 ? imageSize.height : imageSize.width;
-    const height = degree % 180 ? imageSize.width : imageSize.height;
-    canvas.width = width;
-    canvas.height = height;
+    const resizedImage = resizeImage(image, degree);
+    canvas.width = resizedImage.width;
+    canvas.height = resizedImage.height;
 
     // EditMode가 끝나거나 이미지가 변경되면 실행됨
     return () => {

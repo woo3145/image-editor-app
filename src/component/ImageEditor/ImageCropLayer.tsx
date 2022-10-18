@@ -14,12 +14,10 @@ const ImageCropLayer = () => {
   const drawBackground = useCallback(
     (context: CanvasRenderingContext2D) => {
       if (!image) return;
-      const imageSize = resizeImage(image);
-      const width = degree % 180 ? imageSize.height : imageSize.width;
-      const height = degree % 180 ? imageSize.width : imageSize.height;
-      context.clearRect(0, 0, width, height);
+      const resizedImage = resizeImage(image, degree);
+      context.clearRect(0, 0, resizedImage.width, resizedImage.height);
       context.fillStyle = 'rgb(0,0,0,0.4)';
-      context.fillRect(0, 0, width, height);
+      context.fillRect(0, 0, resizedImage.width, resizedImage.height);
     },
     [image, degree]
   );
@@ -52,16 +50,14 @@ const ImageCropLayer = () => {
     if (!cropLayer?.current || !image || editMode !== 'Crop') return;
     const canvas = cropLayer.current;
 
-    const imageSize = resizeImage(image);
-    const width = degree % 180 ? imageSize.height : imageSize.width;
-    const height = degree % 180 ? imageSize.width : imageSize.height;
-    canvas.width = width;
-    canvas.height = height;
+    const resizedImage = resizeImage(image, degree);
+    canvas.width = resizedImage.width;
+    canvas.height = resizedImage.height;
 
     return () => {
       const context = canvas.getContext('2d');
       if (!context) return;
-      context.clearRect(0, 0, imageSize.width, imageSize.height);
+      context.clearRect(0, 0, resizedImage.width, resizedImage.height);
     };
   }, [image, cropLayer, editMode, degree]);
 

@@ -17,11 +17,9 @@ const ImageDrawLayer = () => {
   useEffect(() => {
     if (!image || !drawLayer?.current || editMode !== 'Draw') return;
     const canvas = drawLayer.current;
-    const imageSize = resizeImage(image);
-    const width = degree % 180 ? imageSize.height : imageSize.width;
-    const height = degree % 180 ? imageSize.width : imageSize.height;
-    canvas.width = width;
-    canvas.height = height;
+    const imageSize = resizeImage(image, degree);
+    canvas.width = imageSize.width;
+    canvas.height = imageSize.height;
   }, [drawLayer, editMode, degree, image]);
 
   const initDraw = useCallback(
@@ -32,7 +30,7 @@ const ImageDrawLayer = () => {
       const canvas = previewLayer.current;
       const context = canvas.getContext('2d');
 
-      const imageSize = resizeImage(image);
+      const resizedImage = resizeImage(image, degree);
       if (!context) return;
       context.lineCap = 'round';
       context.lineWidth = range;
@@ -49,13 +47,22 @@ const ImageDrawLayer = () => {
         drawContext.clearRect(
           0,
           0,
-          imageSize.width || 0,
-          imageSize.height || 0
+          resizedImage.width || 0,
+          resizedImage.height || 0
         );
       }
       setMousePoint({ x: e.offsetX, y: e.offsetY, w: 0, h: 0 });
     },
-    [previewLayer, setMousePoint, drawLayer, penType, color, range, image]
+    [
+      previewLayer,
+      setMousePoint,
+      drawLayer,
+      penType,
+      color,
+      range,
+      image,
+      degree,
+    ]
   );
 
   const draw = useCallback(
@@ -75,7 +82,7 @@ const ImageDrawLayer = () => {
 
       if (!context) return;
 
-      const imageSize = resizeImage(image);
+      const imageSize = resizeImage(image, degree);
       if (e.buttons === 1) {
         context.lineCap = 'round';
         context.lineWidth = range;
@@ -100,7 +107,7 @@ const ImageDrawLayer = () => {
         context.moveTo(e.offsetX, e.offsetY);
       }
     },
-    [penType, previewLayer, drawLayer, mousePoint, image, color, range]
+    [penType, previewLayer, drawLayer, mousePoint, image, color, range, degree]
   );
 
   const endDraw = useCallback(

@@ -3,24 +3,25 @@ const CANVAS_MAX_HEIGHT = 600;
 
 // 캔버스 최대 크기 값에 이미지 비율을 조정해주는 함수
 export const resizeImage = (
-  image: HTMLImageElement | { width: number; height: number }
+  image: HTMLImageElement | { width: number; height: number },
+  degree: number
 ): { width: number; height: number } => {
-  if (image.width > image.height) {
+  const w = degree % 180 ? image.height : image.width;
+  const h = degree % 180 ? image.width : image.height;
+  if (w > h) {
     // 가로 이미지
-    const width =
-      image.width < CANVAS_MAX_WIDTH ? image.width : CANVAS_MAX_WIDTH;
+    const width = w < CANVAS_MAX_WIDTH ? w : CANVAS_MAX_WIDTH;
 
     return {
       width: width,
-      height: (image.height * width) / image.width,
+      height: (h * width) / w,
     };
   } else {
     // 세로 이미지
 
-    const height =
-      image.height < CANVAS_MAX_HEIGHT ? image.height : CANVAS_MAX_HEIGHT;
+    const height = h < CANVAS_MAX_HEIGHT ? h : CANVAS_MAX_HEIGHT;
     return {
-      width: (image.width * height) / image.height,
+      width: (w * height) / h,
       height: height,
     };
   }
