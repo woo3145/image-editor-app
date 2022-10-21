@@ -6,18 +6,18 @@ import { ImageContext } from '../../context/ImageProvider';
 import { resizeImage } from '../../utils/imageUtils';
 
 const ImageCropLayer = () => {
-  const { cropLayer, degree } = useContext(ImageLayerContext);
+  const { cropLayer } = useContext(ImageLayerContext);
   const { dragArea } = useContext(DragAreaContext);
   const { editMode } = useContext(EditModeContext);
-  const { image } = useContext(ImageContext);
+  const { image, degree } = useContext(ImageContext);
 
   const drawBackground = useCallback(
     (context: CanvasRenderingContext2D) => {
       if (!image) return;
-      const resizedImage = resizeImage(image, degree);
-      context.clearRect(0, 0, resizedImage.width, resizedImage.height);
+      const { width, height } = resizeImage(image, degree);
+      context.clearRect(0, 0, width, height);
       context.fillStyle = 'rgb(0,0,0,0.4)';
-      context.fillRect(0, 0, resizedImage.width, resizedImage.height);
+      context.fillRect(0, 0, width, height);
     },
     [image, degree]
   );
@@ -50,14 +50,14 @@ const ImageCropLayer = () => {
     if (!cropLayer?.current || !image || editMode !== 'Crop') return;
     const canvas = cropLayer.current;
 
-    const resizedImage = resizeImage(image, degree);
-    canvas.width = resizedImage.width;
-    canvas.height = resizedImage.height;
+    const { width, height } = resizeImage(image, degree);
+    canvas.width = width;
+    canvas.height = height;
 
     return () => {
       const context = canvas.getContext('2d');
       if (!context) return;
-      context.clearRect(0, 0, resizedImage.width, resizedImage.height);
+      context.clearRect(0, 0, width, height);
     };
   }, [image, cropLayer, editMode, degree]);
 

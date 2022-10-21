@@ -4,8 +4,8 @@ import { ImageContext } from '../../context/ImageProvider';
 import { resizeImage } from '../../utils/imageUtils';
 
 const ImagePreviewLayer = () => {
-  const { previewLayer, degree } = useContext(ImageLayerContext);
-  const { image } = useContext(ImageContext);
+  const { previewLayer } = useContext(ImageLayerContext);
+  const { image, degree } = useContext(ImageContext);
 
   useEffect(() => {
     if (!previewLayer?.current || !image) return;

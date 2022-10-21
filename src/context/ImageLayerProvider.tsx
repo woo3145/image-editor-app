@@ -40,12 +40,19 @@ const ImageLayerProvider = ({ children }: Props) => {
   const dragLayer = useRef<HTMLCanvasElement>(null);
   const cropLayer = useRef<HTMLCanvasElement>(null);
   const drawLayer = useRef<HTMLCanvasElement>(null);
+  const { setImage } = useContext(ImageContext);
 
   const [degree, setDegree] = useState(0);
 
   useEffect(() => {
-    setDegree(0);
-  }, [image]);
+    const canvas = previewLayer.current;
+    if (!canvas || !image) return;
+    const imageEl = new Image();
+    imageEl.src = canvas.toDataURL();
+    setImage(image, degree);
+    // deree가 변경 될 때만 호출 됨
+    // eslint-disable-next-line
+  }, [degree]);
 
   const imageLayerContextValue = useMemo(() => {
     return {

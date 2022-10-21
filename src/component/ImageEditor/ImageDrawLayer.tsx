@@ -7,10 +7,9 @@ import { resizeImage } from '../../utils/imageUtils';
 
 const ImageDrawLayer = () => {
   const { editMode } = useContext(EditModeContext);
-  const { previewLayer, dragLayer, drawLayer, degree } =
-    useContext(ImageLayerContext);
+  const { previewLayer, dragLayer, drawLayer } = useContext(ImageLayerContext);
   const { range, color, penType } = useContext(DrawContext);
-  const { setImage, image } = useContext(ImageContext);
+  const { setImage, image, degree } = useContext(ImageContext);
   const [mousePoint, setMousePoint] = useState({ x: 0, y: 0, w: 0, h: 0 });
   const [isPainting, setIsPainting] = useState(false);
 
@@ -24,7 +23,7 @@ const ImageDrawLayer = () => {
 
   const initDraw = useCallback(
     (e: MouseEvent) => {
-      if (!previewLayer?.current || !image) return;
+      if (!previewLayer?.current || !image || editMode !== 'Draw') return;
       setIsPainting(true);
 
       const canvas = previewLayer.current;
@@ -59,12 +58,13 @@ const ImageDrawLayer = () => {
       range,
       image,
       degree,
+      editMode,
     ]
   );
 
   const draw = useCallback(
     (e: MouseEvent) => {
-      if (!image || !isPainting) return;
+      if (!image || !isPainting || editMode !== 'Draw') return;
       let canvas: null | HTMLCanvasElement = null;
       let context: CanvasRenderingContext2D | null = null;
       if (penType === 'Free') {
@@ -122,12 +122,13 @@ const ImageDrawLayer = () => {
       range,
       degree,
       isPainting,
+      editMode,
     ]
   );
 
   const endDraw = useCallback(
     (e: MouseEvent) => {
-      if (isPainting === false) return;
+      if (isPainting === false || editMode !== 'Draw') return;
       console.log('End Draw');
       setIsPainting(false);
       if (!previewLayer?.current) return;
@@ -152,9 +153,18 @@ const ImageDrawLayer = () => {
 
       const imageEl = new Image();
       imageEl.src = canvas.toDataURL();
-      setImage(canvas.toDataURL('image/jpeg'));
+      setImage(canvas.toDataURL('image/jpeg'), 0);
     },
-    [setImage, previewLayer, penType, mousePoint, color, range, isPainting]
+    [
+      setImage,
+      previewLayer,
+      penType,
+      mousePoint,
+      color,
+      range,
+      isPainting,
+      editMode,
+    ]
   );
 
   useEffect(() => {

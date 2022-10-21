@@ -6,7 +6,7 @@ import { ImageContext } from '../context/ImageProvider';
 
 const useCropImage = () => {
   const { dragArea, resetDragArea, isEmpty } = useContext(DragAreaContext);
-  const { previewLayer } = useContext(ImageLayerContext);
+  const { previewLayer, degree } = useContext(ImageLayerContext);
   const { setEditMode } = useContext(EditModeContext);
   const { setImage } = useContext(ImageContext);
 
@@ -34,9 +34,17 @@ const useCropImage = () => {
     previewContext?.putImageData(cropedImage, 0, 0);
 
     resetDragArea();
-    setImage(previewCanvas.toDataURL('image/jpeg'));
+    setImage(previewCanvas.toDataURL('image/jpeg'), degree);
     setEditMode('None');
-  }, [dragArea, isEmpty, resetDragArea, previewLayer, setImage, setEditMode]);
+  }, [
+    dragArea,
+    isEmpty,
+    resetDragArea,
+    previewLayer,
+    setImage,
+    setEditMode,
+    degree,
+  ]);
 
   const onClickCancel = useCallback(() => {
     if (!resetDragArea || !setEditMode) return;

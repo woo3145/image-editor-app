@@ -44,3 +44,4 @@
 ### Bugs
 
 - [x] 1. 이미지 회전 후 draw시 이미지가 돌아감 (layer context에서 image변경 시 degree 초기화로 해결)
+- [x] 2. 이미지 회전 후 history 저장안됨 (history에 degree추가, Image Layer Provider에서 degree 변경 시 history저장)

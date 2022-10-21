@@ -13,10 +13,12 @@ export interface IImageSize {
 }
 interface IImageHistory {
   image: HTMLImageElement;
+  degree: number;
 }
 interface IImageContext {
   image: HTMLImageElement | null;
-  setImage: (image: string | HTMLImageElement) => void;
+  degree: number;
+  setImage: (image: string | HTMLImageElement, degree: number) => void;
   initImage: (image: string | HTMLImageElement) => void;
 }
 interface IImageHistoryContext {
@@ -28,6 +30,7 @@ interface IImageHistoryContext {
 
 export const ImageContext = createContext<IImageContext>({
   image: null,
+  degree: 0,
   setImage: () => {},
   initImage: () => {},
 });
@@ -49,19 +52,22 @@ const ImageProvider = ({ children }: Props) => {
   const [historyIdx, setHistoryIdx] = useState<number>(0);
 
   const setImage = useCallback(
-    (image: string | HTMLImageElement) => {
+    (image: string | HTMLImageElement, degree: number) => {
       if (typeof image === 'string') {
         const imageEl = new Image();
         imageEl.src = image;
 
         imageEl.onload = () => {
           _setImage(imageEl);
-          setHistory([...history.slice(0, historyIdx + 1), { image: imageEl }]);
+          setHistory([
+            ...history.slice(0, historyIdx + 1),
+            { image: imageEl, degree },
+          ]);
           setHistoryIdx(historyIdx + 1);
         };
       } else {
         _setImage(image);
-        setHistory([...history.slice(0, historyIdx + 1), { image }]);
+        setHistory([...history.slice(0, historyIdx + 1), { image, degree }]);
         setHistoryIdx(historyIdx + 1);
       }
     },
@@ -75,12 +81,12 @@ const ImageProvider = ({ children }: Props) => {
 
       imageEl.onload = () => {
         _setImage(imageEl);
-        setHistory([{ image: imageEl }]);
+        setHistory([{ image: imageEl, degree: 0 }]);
         setHistoryIdx(0);
       };
     } else {
       _setImage(image);
-      setHistory([{ image }]);
+      setHistory([{ image, degree: 0 }]);
       setHistoryIdx(0);
     }
   }, []);
@@ -88,6 +94,7 @@ const ImageProvider = ({ children }: Props) => {
   const imageContextValue = useMemo(() => {
     return {
       image: history[historyIdx]?.image || image,
+      degree: history[historyIdx]?.degree || 0,
       setImage,
       initImage,
     };

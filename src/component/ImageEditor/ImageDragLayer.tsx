@@ -6,10 +6,10 @@ import { ImageContext } from '../../context/ImageProvider';
 import { resizeImage } from '../../utils/imageUtils';
 
 const ImageDragLayer = () => {
-  const { dragLayer, degree } = useContext(ImageLayerContext);
+  const { dragLayer } = useContext(ImageLayerContext);
   const { setDragArea, resetDragArea } = useContext(DragAreaContext);
   const { editMode } = useContext(EditModeContext);
-  const { image } = useContext(ImageContext);
+  const { image, degree } = useContext(ImageContext);
 
   // Drag Layer 생성
   useEffect(() => {
