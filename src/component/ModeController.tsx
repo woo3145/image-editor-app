@@ -8,7 +8,7 @@ import {
   isEditModeType,
 } from '../context/EditModeProvider';
 
-const Controller = () => {
+const ModeController = () => {
   const { editMode, setEditMode } = useContext(EditModeContext);
   // Mode Switching
   const onClickHandler = (e: MouseEvent<HTMLLIElement>) => {
@@ -17,20 +17,20 @@ const Controller = () => {
     if (!isEditModeType(selectedMode)) return;
     setEditMode(selectedMode === editMode ? 'None' : selectedMode);
   };
-  const controllerItems: { mode: EditModeType; icon: ReactNode }[] = [
-    { mode: 'Crop', icon: <IoCropOutline className="text-2xl" /> },
-    { mode: 'Draw', icon: <IoPencilOutline className="text-2xl" /> },
-    { mode: 'Rotate', icon: <BsArrowRepeat className="text-2xl" /> },
+  const controllerItems: { text: EditModeType; icon: ReactNode }[] = [
+    { text: 'Crop', icon: <IoCropOutline className="text-2xl" /> },
+    { text: 'Draw', icon: <IoPencilOutline className="text-2xl" /> },
+    { text: 'Rotate', icon: <BsArrowRepeat className="text-2xl" /> },
   ];
   return (
-    <ul className="w-full flex items-center justify-center gap-4">
-      {controllerItems.map(({ mode, icon }, idx) => {
+    <ul className="w-full flex items-center justify-center gap-4 px-4">
+      {controllerItems.map(({ text, icon }, idx) => {
         return (
           <ControllerItem
             key={idx}
-            mode={mode}
+            text={text}
             onClickHandler={onClickHandler}
-            selected={editMode === mode}
+            selected={editMode === text}
             icon={icon}
           />
         );
@@ -39,4 +39,4 @@ const Controller = () => {
   );
 };
 
-export default Controller;
+export default ModeController;

@@ -19,7 +19,7 @@ const useImageHistory = () => {
     setHistoryIdx(historyIdx + 1);
   };
 
-  return { prev, next, history };
+  return { prev, next, history, historyIdx };
 };
 
 export default useImageHistory;

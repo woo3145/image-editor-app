@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import Controller from './component/Controller';
+import ModeController from './component/ModeController';
 import Header from './component/Header';
+import HistoryController from './component/HistoryController';
 import ImageEditor from './component/ImageEditor';
 import DragAreaProvider from './context/DragAreaProvider';
 import DrawProvider from './context/DrawProvider';
@@ -20,7 +21,10 @@ function App() {
         <Header setImageUrl={setImageUrl} />
         <div className="max-w-screen-2xl mx-auto py-8 flex flex-col items-center">
           <EditModeProvider>
-            <Controller />
+            <div className="flex divide-x-2">
+              <ModeController />
+              <HistoryController />
+            </div>
             {/* Image Editor */}
             <ImageLayerProvider>
               <DragAreaProvider>
