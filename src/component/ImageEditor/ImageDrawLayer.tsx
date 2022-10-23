@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { DrawContext } from '../../context/DrawProvider';
+import { DrawContextState } from '../../context/DrawContext';
 import { EditModeContext } from '../../context/EditModeContext';
 import { ImageContextState } from '../../context/ImageContext';
 import { ImageLayerContextState } from '../../context/ImageLayerContext';
@@ -11,7 +11,7 @@ const ImageDrawLayer = () => {
   const { previewLayer, dragLayer, drawLayer } = useContext(
     ImageLayerContextState
   );
-  const { range, color, penType } = useContext(DrawContext);
+  const { range, color, penType } = useContext(DrawContextState);
   const { image, degree } = useContext(ImageContextState);
   const { addHistory } = useImageDispatch();
   const [mousePoint, setMousePoint] = useState({ x: 0, y: 0, w: 0, h: 0 });

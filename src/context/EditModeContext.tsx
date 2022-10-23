@@ -1,13 +1,10 @@
 import { createContext, Dispatch, ReactNode, useMemo, useState } from 'react';
 
-export const isEditModeType = (mode: string): mode is EditModeType => {
-  return ['Crop', 'Draw', 'Rotate', 'None'].includes(mode);
-};
-interface IEditModeContext {
+interface ContextState {
   editMode: EditModeType | null;
   setEditMode: Dispatch<React.SetStateAction<EditModeType>> | null;
 }
-export const EditModeContext = createContext<IEditModeContext>({
+export const EditModeContext = createContext<ContextState>({
   editMode: null,
   setEditMode: null,
 });

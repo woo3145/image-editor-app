@@ -1,12 +1,15 @@
 import { ChangeEvent, useContext } from 'react';
 import { RiRulerLine } from 'react-icons/ri';
 import { IoPencil } from 'react-icons/io5';
-import { DrawContext } from '../../../../context/DrawProvider';
+import {
+  DrawContextDispatch,
+  DrawContextState,
+} from '../../../../context/DrawContext';
 import ColorPicker from './ColorPicker';
 
 const DrawSubmenu = () => {
-  const { range, setRange } = useContext(DrawContext);
-  const { penType, setPenType } = useContext(DrawContext);
+  const { range, penType } = useContext(DrawContextState);
+  const { setRange, setPenType } = useContext(DrawContextDispatch);
 
   const onChangeRange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

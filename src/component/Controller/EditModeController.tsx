@@ -1,8 +1,9 @@
 import { IoCropOutline, IoPencilOutline } from 'react-icons/io5';
 import { BsArrowRepeat } from 'react-icons/bs';
 import { MouseEvent, ReactNode, useContext } from 'react';
-import { EditModeContext, isEditModeType } from '../../context/EditModeContext';
+import { EditModeContext } from '../../context/EditModeContext';
 import ControllerItem from './ControllerItem';
+import { isEditModeType } from '../../utils/typeChecker';
 
 const EditModeController = () => {
   const { editMode, setEditMode } = useContext(EditModeContext);

@@ -1,11 +1,15 @@
 import { useCallback, useContext } from 'react';
-import { DragAreaContext } from '../context/DragAreaProvider';
+import {
+  DragAreaContextDispatch,
+  DragAreaContextState,
+} from '../context/DragAreaContext';
 import { EditModeContext } from '../context/EditModeContext';
 import { ImageLayerContextState } from '../context/ImageLayerContext';
 import useImageDispatch from './useImageDispatch';
 
 const useCropImage = () => {
-  const { dragArea, resetDragArea, isEmpty } = useContext(DragAreaContext);
+  const { dragArea, isEmpty } = useContext(DragAreaContextState);
+  const { resetDragArea } = useContext(DragAreaContextDispatch);
   const { previewLayer, degree } = useContext(ImageLayerContextState);
   const { setEditMode } = useContext(EditModeContext);
   const { addHistory } = useImageDispatch();

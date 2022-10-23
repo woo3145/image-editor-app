@@ -1,14 +1,17 @@
 import { MouseEvent, useContext, useState } from 'react';
-import { DrawContext } from '../../../../context/DrawProvider';
+import {
+  DrawContextDispatch,
+  DrawContextState,
+} from '../../../../context/DrawContext';
 
 const colors = [
-  'rgb(0,0,0)',
+  'black',
   'rgb(55,65,81)',
   'rgb(107,114,128)',
   'rgb(156,163,175)',
   'rgb(209,213,219)',
   'rgb(229,231,235)',
-  'rbg(255,255,255)',
+  'white',
   'rgb(239,68,68)',
   'rgb(251,146,60)',
   'rgb(250,204,21)',
@@ -20,10 +23,12 @@ const colors = [
 
 const ColorPicker = () => {
   const [pickerVisible, setPickerVisible] = useState(false);
-  const { color, setColor } = useContext(DrawContext);
+  const { color } = useContext(DrawContextState);
+  const { setColor } = useContext(DrawContextDispatch);
 
   const onClickChangeColor = (e: MouseEvent<HTMLLIElement>) => {
     if (!setColor) return;
+    console.log(e.currentTarget.style.backgroundColor);
     setColor(e.currentTarget.style.backgroundColor);
     setPickerVisible(false);
   };
