@@ -7,7 +7,7 @@ import DragAreaProvider from './context/DragAreaProvider';
 import DrawProvider from './context/DrawProvider';
 import EditModeProvider from './context/EditModeProvider';
 import ImageLayerProvider from './context/ImageLayerProvider';
-import ImageProvider from './context/ImageProvider';
+import { ImageProvider } from './context/ImageContext';
 
 const SAMPLE_IMAGE1 = '/alvan-nee-lvFlpqEvuRM-unsplash.jpg';
 const SAMPLE_IMAGE2 = '/lachlan-gowen-cWwqwN2uTo4-unsplash.jpg';

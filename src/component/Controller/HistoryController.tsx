@@ -1,17 +1,19 @@
 import { BiUndo, BiRedo, BiHistory } from 'react-icons/bi';
-import { MouseEvent, ReactNode, useMemo } from 'react';
-import useImageHistory from '../../hooks/useImageHistory';
+import { MouseEvent, ReactNode, useContext, useMemo } from 'react';
 import ControllerItem from './ControllerItem';
+import useImageDispatch from '../../hooks/useImageDispatch';
+import { ImageContextState } from '../../context/ImageContext';
 
 const HistoryController = () => {
-  const { prev, next, history, historyIdx } = useImageHistory();
+  const { redo, undo } = useImageDispatch();
+  const { history, historyIdx } = useContext(ImageContextState);
   // Mode Switching
   const onClickHandler = (e: MouseEvent<HTMLLIElement>) => {
     const command = e.currentTarget.id;
     if (command === 'Undo') {
-      prev();
+      redo();
     } else if (command === 'Redo') {
-      next();
+      undo();
     } else if (command === 'History') {
       console.log(history);
     }

@@ -2,14 +2,16 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { DrawContext } from '../../context/DrawProvider';
 import { EditModeContext } from '../../context/EditModeProvider';
 import { ImageLayerContext } from '../../context/ImageLayerProvider';
-import { ImageContext } from '../../context/ImageProvider';
+import { ImageContextState } from '../../context/ImageContext';
+import useImageDispatch from '../../hooks/useImageDispatch';
 import { resizeImage } from '../../utils/imageUtils';
 
 const ImageDrawLayer = () => {
   const { editMode } = useContext(EditModeContext);
   const { previewLayer, dragLayer, drawLayer } = useContext(ImageLayerContext);
   const { range, color, penType } = useContext(DrawContext);
-  const { setImage, image, degree } = useContext(ImageContext);
+  const { image, degree } = useContext(ImageContextState);
+  const { addHistory } = useImageDispatch();
   const [mousePoint, setMousePoint] = useState({ x: 0, y: 0, w: 0, h: 0 });
   const [isPainting, setIsPainting] = useState(false);
 
@@ -153,10 +155,10 @@ const ImageDrawLayer = () => {
 
       const imageEl = new Image();
       imageEl.src = canvas.toDataURL();
-      setImage(canvas.toDataURL('image/jpeg'), 0);
+      addHistory(canvas.toDataURL('image/jpeg'), 0);
     },
     [
-      setImage,
+      addHistory,
       previewLayer,
       penType,
       mousePoint,

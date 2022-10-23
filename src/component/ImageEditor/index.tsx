@@ -3,14 +3,16 @@ import ImageCropLayer from './ImageCropLayer';
 import ImageDragLayer from './ImageDragLayer';
 import ImageEditorSubmenu from './ImageEditorSubmenu';
 import ImagePreviewLayer from './ImagePreviewLayer';
-import { ImageContext } from '../../context/ImageProvider';
 import ImageDrawLayer from './ImageDrawLayer';
+import { ImageContextState } from '../../context/ImageContext';
+import useImageDispatch from '../../hooks/useImageDispatch';
 
 interface Props {
   imageUrl: string;
 }
 const ImageEditor = ({ imageUrl }: Props) => {
-  const { image, initImage } = useContext(ImageContext);
+  const { image } = useContext(ImageContextState);
+  const { initImage } = useImageDispatch();
 
   useEffect(() => {
     initImage(imageUrl);

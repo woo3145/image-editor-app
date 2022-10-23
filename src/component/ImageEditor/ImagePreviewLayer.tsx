@@ -1,11 +1,11 @@
 import { useContext, useEffect } from 'react';
 import { ImageLayerContext } from '../../context/ImageLayerProvider';
-import { ImageContext } from '../../context/ImageProvider';
+import { ImageContextState } from '../../context/ImageContext';
 import { resizeImage } from '../../utils/imageUtils';
 
 const ImagePreviewLayer = () => {
   const { previewLayer } = useContext(ImageLayerContext);
-  const { image, degree } = useContext(ImageContext);
+  const { image, degree } = useContext(ImageContextState);
 
   useEffect(() => {
     if (!previewLayer?.current || !image) return;

@@ -1,12 +1,12 @@
 import { ChangeEvent, Dispatch, useContext } from 'react';
-import { ImageContext } from '../context/ImageProvider';
+import { ImageContextState } from '../context/ImageContext';
 
 interface Props {
   setImageUrl: Dispatch<React.SetStateAction<string>>;
 }
 
 const Header = ({ setImageUrl }: Props) => {
-  const { image } = useContext(ImageContext);
+  const { image } = useContext(ImageContextState);
 
   const onChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length) {

@@ -10,7 +10,8 @@ import {
   useRef,
   useState,
 } from 'react';
-import { ImageContext } from './ImageProvider';
+import useImageDispatch from '../hooks/useImageDispatch';
+import { ImageContextState } from './ImageContext';
 
 interface IImageLayerContext {
   previewLayer: RefObject<HTMLCanvasElement> | null;
@@ -35,12 +36,12 @@ interface Props {
 }
 
 const ImageLayerProvider = ({ children }: Props) => {
-  const { image } = useContext(ImageContext);
+  const { image } = useContext(ImageContextState);
   const previewLayer = useRef<HTMLCanvasElement>(null);
   const dragLayer = useRef<HTMLCanvasElement>(null);
   const cropLayer = useRef<HTMLCanvasElement>(null);
   const drawLayer = useRef<HTMLCanvasElement>(null);
-  const { setImage } = useContext(ImageContext);
+  const { addHistory } = useImageDispatch();
 
   const [degree, setDegree] = useState(0);
 
@@ -49,7 +50,7 @@ const ImageLayerProvider = ({ children }: Props) => {
     if (!canvas || !image) return;
     const imageEl = new Image();
     imageEl.src = canvas.toDataURL();
-    setImage(image, degree);
+    addHistory(image, degree);
     // deree가 변경 될 때만 호출 됨
     // eslint-disable-next-line
   }, [degree]);

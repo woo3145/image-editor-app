@@ -2,13 +2,13 @@ import { useCallback, useContext } from 'react';
 import { DragAreaContext } from '../context/DragAreaProvider';
 import { EditModeContext } from '../context/EditModeProvider';
 import { ImageLayerContext } from '../context/ImageLayerProvider';
-import { ImageContext } from '../context/ImageProvider';
+import useImageDispatch from './useImageDispatch';
 
 const useCropImage = () => {
   const { dragArea, resetDragArea, isEmpty } = useContext(DragAreaContext);
   const { previewLayer, degree } = useContext(ImageLayerContext);
   const { setEditMode } = useContext(EditModeContext);
-  const { setImage } = useContext(ImageContext);
+  const { addHistory } = useImageDispatch();
 
   const onClickApply = useCallback(() => {
     if (!previewLayer?.current || !dragArea || !resetDragArea || !setEditMode)
@@ -34,14 +34,14 @@ const useCropImage = () => {
     previewContext?.putImageData(cropedImage, 0, 0);
 
     resetDragArea();
-    setImage(previewCanvas.toDataURL('image/jpeg'), degree);
+    addHistory(previewCanvas.toDataURL('image/jpeg'), degree);
     setEditMode('None');
   }, [
     dragArea,
     isEmpty,
     resetDragArea,
     previewLayer,
-    setImage,
+    addHistory,
     setEditMode,
     degree,
   ]);
