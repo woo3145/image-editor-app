@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { DragAreaContextDispatch } from '../../context/DragAreaContext';
-import { EditModeContext } from '../../context/EditModeContext';
+import { EditModeContextState } from '../../context/EditModeContext';
 import { ImageContextState } from '../../context/ImageContext';
 import { ImageLayerContextState } from '../../context/ImageLayerContext';
 import { resizeImage } from '../../utils/imageUtils';
@@ -8,7 +8,7 @@ import { resizeImage } from '../../utils/imageUtils';
 const ImageDragLayer = () => {
   const { dragLayer } = useContext(ImageLayerContextState);
   const { setDragArea, resetDragArea } = useContext(DragAreaContextDispatch);
-  const { editMode } = useContext(EditModeContext);
+  const { editMode } = useContext(EditModeContextState);
   const { image, degree } = useContext(ImageContextState);
 
   // Drag Layer 생성

@@ -3,15 +3,16 @@ import {
   DragAreaContextDispatch,
   DragAreaContextState,
 } from '../context/DragAreaContext';
-import { EditModeContext } from '../context/EditModeContext';
+import { EditModeContextDispatch } from '../context/EditModeContext';
 import { ImageLayerContextState } from '../context/ImageLayerContext';
 import useImageDispatch from './useImageDispatch';
 
 const useCropImage = () => {
   const { dragArea, isEmpty } = useContext(DragAreaContextState);
-  const { resetDragArea } = useContext(DragAreaContextDispatch);
   const { previewLayer, degree } = useContext(ImageLayerContextState);
-  const { setEditMode } = useContext(EditModeContext);
+
+  const { setEditMode } = useContext(EditModeContextDispatch);
+  const { resetDragArea } = useContext(DragAreaContextDispatch);
   const { addHistory } = useImageDispatch();
 
   const onClickApply = useCallback(() => {

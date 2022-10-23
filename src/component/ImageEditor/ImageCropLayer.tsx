@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect } from 'react';
 import { DragAreaContextState } from '../../context/DragAreaContext';
-import { EditModeContext } from '../../context/EditModeContext';
+import { EditModeContextState } from '../../context/EditModeContext';
 import { ImageContextState } from '../../context/ImageContext';
 import { ImageLayerContextState } from '../../context/ImageLayerContext';
 import { resizeImage } from '../../utils/imageUtils';
@@ -8,7 +8,7 @@ import { resizeImage } from '../../utils/imageUtils';
 const ImageCropLayer = () => {
   const { cropLayer } = useContext(ImageLayerContextState);
   const { dragArea } = useContext(DragAreaContextState);
-  const { editMode } = useContext(EditModeContext);
+  const { editMode } = useContext(EditModeContextState);
   const { image, degree } = useContext(ImageContextState);
 
   const drawBackground = useCallback(

@@ -1,13 +1,13 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { DrawContextState } from '../../context/DrawContext';
-import { EditModeContext } from '../../context/EditModeContext';
+import { EditModeContextState } from '../../context/EditModeContext';
 import { ImageContextState } from '../../context/ImageContext';
 import { ImageLayerContextState } from '../../context/ImageLayerContext';
 import useImageDispatch from '../../hooks/useImageDispatch';
 import { resizeImage } from '../../utils/imageUtils';
 
 const ImageDrawLayer = () => {
-  const { editMode } = useContext(EditModeContext);
+  const { editMode } = useContext(EditModeContextState);
   const { previewLayer, dragLayer, drawLayer } = useContext(
     ImageLayerContextState
   );
