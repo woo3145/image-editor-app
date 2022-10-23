@@ -1,18 +1,16 @@
-import { ChangeEvent, Dispatch, useContext } from 'react';
+import { ChangeEvent, useContext } from 'react';
 import { ImageContextState } from '../context/ImageContext';
+import useImageDispatch from '../hooks/useImageDispatch';
 
-interface Props {
-  setImageUrl: Dispatch<React.SetStateAction<string>>;
-}
-
-const Header = ({ setImageUrl }: Props) => {
+const Header = () => {
   const { image } = useContext(ImageContextState);
+  const { initImage } = useImageDispatch();
 
   const onChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length) {
       const file = e.target.files;
       const fileUrl = URL.createObjectURL(file[0]);
-      setImageUrl(fileUrl);
+      initImage(fileUrl);
     }
   };
   const downloadImage = () => {
@@ -25,7 +23,7 @@ const Header = ({ setImageUrl }: Props) => {
     aElement.remove();
   };
   return (
-    <header className="w-full py-4 border-b">
+    <header className="w-full py-4 px-4 border-b">
       <div className="w-full max-w-screen-2xl mx-auto flex items-center justify-between">
         <p className="text-2xl text-blue-900 cursor-pointer">
           <b>Woo3145</b> Image Editor

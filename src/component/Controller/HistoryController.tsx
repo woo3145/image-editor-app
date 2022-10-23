@@ -11,9 +11,9 @@ const HistoryController = () => {
   const onClickHandler = (e: MouseEvent<HTMLLIElement>) => {
     const command = e.currentTarget.id;
     if (command === 'Undo') {
-      redo();
-    } else if (command === 'Redo') {
       undo();
+    } else if (command === 'Redo') {
+      redo();
     } else if (command === 'History') {
       console.log(history);
     }

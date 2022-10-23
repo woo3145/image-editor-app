@@ -1,7 +1,5 @@
 import { createContext, Dispatch, ReactNode, useMemo, useState } from 'react';
 
-export type EditModeType = 'Crop' | 'Draw' | 'Rotate' | 'None';
-
 export const isEditModeType = (mode: string): mode is EditModeType => {
   return ['Crop', 'Draw', 'Rotate', 'None'].includes(mode);
 };
@@ -14,11 +12,7 @@ export const EditModeContext = createContext<IEditModeContext>({
   setEditMode: null,
 });
 
-interface Props {
-  children: ReactNode;
-}
-
-const EditModeProvider = ({ children }: Props) => {
+export const EditModeProvider = ({ children }: { children: ReactNode }) => {
   const [editMode, setEditMode] = useState<EditModeType>('None');
 
   const editModeContextValue = useMemo(() => {
@@ -34,5 +28,3 @@ const EditModeProvider = ({ children }: Props) => {
     </EditModeContext.Provider>
   );
 };
-
-export default EditModeProvider;

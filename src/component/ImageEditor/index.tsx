@@ -1,22 +1,13 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import ImageCropLayer from './ImageCropLayer';
 import ImageDragLayer from './ImageDragLayer';
 import ImageEditorSubmenu from './ImageEditorSubmenu';
 import ImagePreviewLayer from './ImagePreviewLayer';
 import ImageDrawLayer from './ImageDrawLayer';
 import { ImageContextState } from '../../context/ImageContext';
-import useImageDispatch from '../../hooks/useImageDispatch';
 
-interface Props {
-  imageUrl: string;
-}
-const ImageEditor = ({ imageUrl }: Props) => {
+const ImageEditor = () => {
   const { image } = useContext(ImageContextState);
-  const { initImage } = useImageDispatch();
-
-  useEffect(() => {
-    initImage(imageUrl);
-  }, [imageUrl, initImage]);
 
   return (
     <div className="w-full max-w-screen-lg pt-2 ">

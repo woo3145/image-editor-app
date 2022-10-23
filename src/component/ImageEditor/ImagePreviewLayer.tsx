@@ -1,10 +1,10 @@
 import { useContext, useEffect } from 'react';
-import { ImageLayerContext } from '../../context/ImageLayerProvider';
 import { ImageContextState } from '../../context/ImageContext';
+import { ImageLayerContextState } from '../../context/ImageLayerContext';
 import { resizeImage } from '../../utils/imageUtils';
 
 const ImagePreviewLayer = () => {
-  const { previewLayer } = useContext(ImageLayerContext);
+  const { previewLayer } = useContext(ImageLayerContextState);
   const { image, degree } = useContext(ImageContextState);
 
   useEffect(() => {

@@ -27,11 +27,7 @@ export const ImageContextDispatch = createContext<ContextDispatch>({
   setRootImage: null,
 });
 
-interface Props {
-  children: ReactNode;
-}
-
-export const ImageProvider = ({ children }: Props) => {
+export const ImageProvider = ({ children }: { children: ReactNode }) => {
   const [rootImage, setRootImage] = useState<HTMLImageElement | null>(null);
 
   const [history, setHistory] = useState<ImageHistoryNode[]>([]);

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { EditModeContext } from '../../../context/EditModeProvider';
+import { EditModeContext } from '../../../context/EditModeContext';
 import CropSubmenu from './CropSubmenu';
 import DrawSubmenu from './DrawSubmenu';
 import RotateSubmenu from './RotateSubmenu';

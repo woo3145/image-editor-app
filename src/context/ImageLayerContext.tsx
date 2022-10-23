@@ -13,64 +13,67 @@ import {
 import useImageDispatch from '../hooks/useImageDispatch';
 import { ImageContextState } from './ImageContext';
 
-interface IImageLayerContext {
+interface ContextState {
   previewLayer: RefObject<HTMLCanvasElement> | null;
   dragLayer: RefObject<HTMLCanvasElement> | null;
   cropLayer: RefObject<HTMLCanvasElement> | null;
   drawLayer: RefObject<HTMLCanvasElement> | null;
   degree: number;
+}
+interface ContextDispatch {
   setDegree: Dispatch<SetStateAction<number>>;
 }
 
-export const ImageLayerContext = createContext<IImageLayerContext>({
+export const ImageLayerContextState = createContext<ContextState>({
   previewLayer: null,
   dragLayer: null,
   cropLayer: null,
   drawLayer: null,
   degree: 0,
+});
+export const ImageLayerContextDispatch = createContext<ContextDispatch>({
   setDegree: () => null,
 });
 
-interface Props {
-  children: ReactNode;
-}
-
-const ImageLayerProvider = ({ children }: Props) => {
-  const { image } = useContext(ImageContextState);
+export const ImageLayerProvider = ({ children }: { children: ReactNode }) => {
   const previewLayer = useRef<HTMLCanvasElement>(null);
   const dragLayer = useRef<HTMLCanvasElement>(null);
   const cropLayer = useRef<HTMLCanvasElement>(null);
   const drawLayer = useRef<HTMLCanvasElement>(null);
-  const { addHistory } = useImageDispatch();
-
   const [degree, setDegree] = useState(0);
 
+  const { image } = useContext(ImageContextState);
+  const { addHistory } = useImageDispatch();
+
   useEffect(() => {
-    const canvas = previewLayer.current;
-    if (!canvas || !image) return;
-    const imageEl = new Image();
-    imageEl.src = canvas.toDataURL();
+    if (!image) return;
     addHistory(image, degree);
     // deree가 변경 될 때만 호출 됨
     // eslint-disable-next-line
   }, [degree]);
 
-  const imageLayerContextValue = useMemo(() => {
+  const imageLayerContexStatetValue = useMemo(() => {
     return {
       previewLayer,
       dragLayer,
       cropLayer,
       drawLayer,
       degree,
+    };
+  }, [previewLayer, degree]);
+  const imageLayerContextDispatchValue = useMemo(() => {
+    return {
       setDegree,
     };
-  }, [previewLayer, degree, setDegree]);
+  }, [setDegree]);
 
   return (
-    <ImageLayerContext.Provider value={imageLayerContextValue}>
-      {children}
-    </ImageLayerContext.Provider>
+    <ImageLayerContextState.Provider value={imageLayerContexStatetValue}>
+      <ImageLayerContextDispatch.Provider
+        value={imageLayerContextDispatchValue}
+      >
+        {children}
+      </ImageLayerContextDispatch.Provider>
+    </ImageLayerContextState.Provider>
   );
 };
-
-export default ImageLayerProvider;
