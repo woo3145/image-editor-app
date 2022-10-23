@@ -1,5 +1,5 @@
 import { MouseEvent, useContext, useState } from 'react';
-import { DrawContext } from '../../../context/DrawProvider';
+import { DrawContext } from '../../../../context/DrawProvider';
 
 const colors = [
   'rgb(0,0,0)',

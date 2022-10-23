@@ -1,5 +1,5 @@
 import { GrRotateLeft, GrRotateRight } from 'react-icons/gr';
-import useRotateImage from '../../hooks/useRotateImage';
+import useRotateImage from '../../../hooks/useRotateImage';
 
 const RotateSubmenu = () => {
   const { rotateLeft, rotateRight } = useRotateImage();

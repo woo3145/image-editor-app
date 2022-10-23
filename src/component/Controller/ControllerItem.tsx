@@ -1,5 +1,5 @@
 import { MouseEvent, ReactNode } from 'react';
-import TooltipIcon from './TooltipIcon';
+import TooltipIcon from '../atom/TooltipIcon';
 
 interface Props {
   text: string;

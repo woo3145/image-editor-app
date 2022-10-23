@@ -2,7 +2,7 @@ import { MouseEvent, ReactNode, useState } from 'react';
 import { BsCheck2 } from 'react-icons/bs';
 import { GiSquare } from 'react-icons/gi';
 import { IoCloseOutline } from 'react-icons/io5';
-import useCropImage from '../../hooks/useCropImage';
+import useCropImage from '../../../hooks/useCropImage';
 
 const CropSubmenu = () => {
   const [cropMode, setCropMode] = useState('Custom');

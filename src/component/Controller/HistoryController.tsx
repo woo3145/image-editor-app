@@ -1,7 +1,7 @@
 import { BiUndo, BiRedo, BiHistory } from 'react-icons/bi';
 import { MouseEvent, ReactNode, useMemo } from 'react';
+import useImageHistory from '../../hooks/useImageHistory';
 import ControllerItem from './ControllerItem';
-import useImageHistory from '../hooks/useImageHistory';
 
 const HistoryController = () => {
   const { prev, next, history, historyIdx } = useImageHistory();

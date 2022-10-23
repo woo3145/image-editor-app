@@ -1,7 +1,7 @@
 import { ChangeEvent, useContext } from 'react';
 import { RiRulerLine } from 'react-icons/ri';
 import { IoPencil } from 'react-icons/io5';
-import { DrawContext } from '../../../context/DrawProvider';
+import { DrawContext } from '../../../../context/DrawProvider';
 import ColorPicker from './ColorPicker';
 
 const DrawSubmenu = () => {

@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import ImageCropLayer from './ImageCropLayer';
 import ImageDragLayer from './ImageDragLayer';
-import ImageEditorSubmenu from '../ImageEditorSubmenu';
+import ImageEditorSubmenu from './ImageEditorSubmenu';
 import ImagePreviewLayer from './ImagePreviewLayer';
 import { ImageContext } from '../../context/ImageProvider';
 import ImageDrawLayer from './ImageDrawLayer';

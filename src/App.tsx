@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import ModeController from './component/ModeController';
+import ModeController from './component/Controller/ModeController';
 import Header from './component/Header';
-import HistoryController from './component/HistoryController';
+import HistoryController from './component/Controller/HistoryController';
 import ImageEditor from './component/ImageEditor';
 import DragAreaProvider from './context/DragAreaProvider';
 import DrawProvider from './context/DrawProvider';
