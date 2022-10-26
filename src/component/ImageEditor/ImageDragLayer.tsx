@@ -3,35 +3,33 @@ import { DragAreaContextDispatch } from '../../context/DragAreaContext';
 import { EditModeContextState } from '../../context/EditModeContext';
 import { ImageContextState } from '../../context/ImageContext';
 import { ImageLayerContextState } from '../../context/ImageLayerContext';
-import { resizeImage } from '../../utils/imageUtils';
 
 const ImageDragLayer = () => {
   const { dragLayer } = useContext(ImageLayerContextState);
-  const { setDragArea, resetDragArea } = useContext(DragAreaContextDispatch);
   const { editMode } = useContext(EditModeContextState);
-  const { image, degree } = useContext(ImageContextState);
+  const { imageSize } = useContext(ImageContextState);
+
+  const { setDragArea, resetDragArea } = useContext(DragAreaContextDispatch);
 
   // Drag Layer 생성
   useEffect(() => {
-    if (!dragLayer?.current || editMode === 'None' || !image) return;
+    if (!dragLayer?.current || editMode === 'None' || !imageSize) return;
     const canvas = dragLayer.current;
-    const { width, height } = resizeImage(image, degree);
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = imageSize.width;
+    canvas.height = imageSize.height;
 
     // EditMode가 끝나거나 이미지가 변경되면 실행됨
     return () => {
       resetDragArea();
     };
-  }, [image, dragLayer, editMode, resetDragArea, degree]);
+  }, [dragLayer, editMode, resetDragArea, imageSize]);
 
   const onMouseDownHandler = ({
     buttons,
     clientX,
     clientY,
   }: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!dragLayer?.current || !image || editMode === 'None' || !setDragArea)
-      return;
+    if (!dragLayer?.current || editMode === 'None' || !setDragArea) return;
     if (buttons !== 1) return;
 
     resetDragArea();
@@ -50,8 +48,7 @@ const ImageDragLayer = () => {
     clientX,
     clientY,
   }: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!dragLayer?.current || !image || editMode === 'None' || !setDragArea)
-      return;
+    if (!dragLayer?.current || editMode === 'None' || !setDragArea) return;
     if (buttons !== 1) return;
 
     const canvas = dragLayer.current;

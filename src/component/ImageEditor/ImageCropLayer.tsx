@@ -1,25 +1,21 @@
 import { useCallback, useContext, useEffect } from 'react';
 import { DragAreaContextState } from '../../context/DragAreaContext';
-import { EditModeContextState } from '../../context/EditModeContext';
 import { ImageContextState } from '../../context/ImageContext';
 import { ImageLayerContextState } from '../../context/ImageLayerContext';
-import { resizeImage } from '../../utils/imageUtils';
 
 const ImageCropLayer = () => {
   const { cropLayer } = useContext(ImageLayerContextState);
   const { dragArea } = useContext(DragAreaContextState);
-  const { editMode } = useContext(EditModeContextState);
-  const { image, degree } = useContext(ImageContextState);
+  const { imageSize } = useContext(ImageContextState);
 
   const drawBackground = useCallback(
     (context: CanvasRenderingContext2D) => {
-      if (!image) return;
-      const { width, height } = resizeImage(image, degree);
-      context.clearRect(0, 0, width, height);
+      if (!imageSize) return;
+      context.clearRect(0, 0, imageSize.width, imageSize.height);
       context.fillStyle = 'rgb(0,0,0,0.4)';
-      context.fillRect(0, 0, width, height);
+      context.fillRect(0, 0, imageSize.width, imageSize.height);
     },
-    [image, degree]
+    [imageSize]
   );
   const removeDragArea = useCallback(
     (context: CanvasRenderingContext2D) => {
@@ -35,7 +31,7 @@ const ImageCropLayer = () => {
     [dragArea]
   );
   const drawCropArea = useCallback(() => {
-    if (!cropLayer?.current || editMode !== 'Crop' || !dragArea) return;
+    if (!cropLayer?.current || !dragArea) return;
 
     const canvas = cropLayer.current;
     const context = canvas.getContext('2d');
@@ -43,29 +39,26 @@ const ImageCropLayer = () => {
     if (!context) return;
     drawBackground(context);
     removeDragArea(context);
-  }, [cropLayer, dragArea, editMode, drawBackground, removeDragArea]);
+  }, [cropLayer, dragArea, drawBackground, removeDragArea]);
 
   // Crop Layer 생성
   useEffect(() => {
-    if (!cropLayer?.current || !image || editMode !== 'Crop') return;
+    if (!cropLayer?.current || !imageSize) return;
     const canvas = cropLayer.current;
 
-    const { width, height } = resizeImage(image, degree);
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = imageSize.width;
+    canvas.height = imageSize.height;
 
     return () => {
       const context = canvas.getContext('2d');
       if (!context) return;
-      context.clearRect(0, 0, width, height);
+      context.clearRect(0, 0, imageSize.width, imageSize.height);
     };
-  }, [image, cropLayer, editMode, degree]);
+  }, [cropLayer, imageSize]);
 
   useEffect(() => {
     drawCropArea();
   }, [drawCropArea]);
-
-  if (editMode !== 'Crop') return null;
 
   return <canvas className="absolute top-0" ref={cropLayer} />;
 };

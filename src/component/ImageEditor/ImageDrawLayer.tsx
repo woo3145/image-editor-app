@@ -1,39 +1,36 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { DrawContextState } from '../../context/DrawContext';
-import { EditModeContextState } from '../../context/EditModeContext';
 import { ImageContextState } from '../../context/ImageContext';
 import { ImageLayerContextState } from '../../context/ImageLayerContext';
 import useImageDispatch from '../../hooks/useImageDispatch';
-import { resizeImage } from '../../utils/imageUtils';
 
 const ImageDrawLayer = () => {
-  const { editMode } = useContext(EditModeContextState);
   const { previewLayer, dragLayer, drawLayer } = useContext(
     ImageLayerContextState
   );
   const { range, color, penType } = useContext(DrawContextState);
-  const { image, degree } = useContext(ImageContextState);
+  const { imageSize } = useContext(ImageContextState);
+
   const { addHistory } = useImageDispatch();
+
   const [mousePoint, setMousePoint] = useState({ x: 0, y: 0, w: 0, h: 0 });
   const [isPainting, setIsPainting] = useState(false);
 
   useEffect(() => {
-    if (!image || !drawLayer?.current || editMode !== 'Draw') return;
+    if (!drawLayer?.current || !imageSize) return;
     const canvas = drawLayer.current;
-    const { width, height } = resizeImage(image, degree);
-    canvas.width = width;
-    canvas.height = height;
-  }, [drawLayer, editMode, degree, image]);
+    canvas.width = imageSize.width;
+    canvas.height = imageSize.height;
+  }, [drawLayer, imageSize]);
 
   const initDraw = useCallback(
     (e: MouseEvent) => {
-      if (!previewLayer?.current || !image || editMode !== 'Draw') return;
+      if (!previewLayer?.current || !imageSize) return;
       setIsPainting(true);
 
       const canvas = previewLayer.current;
       const context = canvas.getContext('2d');
 
-      const { width, height } = resizeImage(image, degree);
       if (!context) return;
       context.lineCap = 'round';
       context.lineWidth = range;
@@ -49,26 +46,16 @@ const ImageDrawLayer = () => {
         const drawCanvas = drawLayer.current;
         const drawContext = drawCanvas.getContext('2d');
         if (!drawContext) return;
-        drawContext.clearRect(0, 0, width, height);
+        drawContext.clearRect(0, 0, imageSize.width, imageSize.height);
         setMousePoint({ x: e.offsetX, y: e.offsetY, w: 0, h: 0 });
       }
     },
-    [
-      previewLayer,
-      setMousePoint,
-      drawLayer,
-      penType,
-      color,
-      range,
-      image,
-      degree,
-      editMode,
-    ]
+    [previewLayer, setMousePoint, drawLayer, penType, color, range, imageSize]
   );
 
   const draw = useCallback(
     (e: MouseEvent) => {
-      if (!image || !isPainting || editMode !== 'Draw') return;
+      if (!imageSize || !isPainting) return;
       let canvas: null | HTMLCanvasElement = null;
       let context: CanvasRenderingContext2D | null = null;
       if (penType === 'Free') {
@@ -84,7 +71,6 @@ const ImageDrawLayer = () => {
       if (!context || !canvas) return;
       const canvasPosition = canvas.getBoundingClientRect();
 
-      const { width, height } = resizeImage(image, degree);
       if (e.buttons === 1) {
         context.lineCap = 'round';
         context.lineWidth = range;
@@ -102,7 +88,7 @@ const ImageDrawLayer = () => {
             context.stroke();
           }
         } else if (penType === 'Straight') {
-          context.clearRect(0, 0, width, height);
+          context.clearRect(0, 0, imageSize.width, imageSize.height);
           context.beginPath();
           context.moveTo(mousePoint.x, mousePoint.y);
           context.lineTo(x, y);
@@ -121,18 +107,16 @@ const ImageDrawLayer = () => {
       previewLayer,
       drawLayer,
       mousePoint,
-      image,
       color,
       range,
-      degree,
       isPainting,
-      editMode,
+      imageSize,
     ]
   );
 
   const endDraw = useCallback(
     (e: MouseEvent) => {
-      if (isPainting === false || editMode !== 'Draw') return;
+      if (isPainting === false) return;
       console.log('End Draw');
       setIsPainting(false);
       if (!previewLayer?.current) return;
@@ -159,20 +143,10 @@ const ImageDrawLayer = () => {
       imageEl.src = canvas.toDataURL();
       addHistory(canvas.toDataURL('image/jpeg'), 0);
     },
-    [
-      addHistory,
-      previewLayer,
-      penType,
-      mousePoint,
-      color,
-      range,
-      isPainting,
-      editMode,
-    ]
+    [addHistory, previewLayer, penType, mousePoint, color, range, isPainting]
   );
 
   useEffect(() => {
-    if (editMode !== 'Draw') return;
     const canvas = dragLayer?.current;
     if (!canvas) return;
     canvas.addEventListener('mousedown', initDraw);
@@ -184,9 +158,7 @@ const ImageDrawLayer = () => {
       document.removeEventListener('mousemove', draw);
       document.removeEventListener('mouseup', endDraw);
     };
-  }, [draw, dragLayer, initDraw, endDraw, editMode, isPainting]);
-
-  if (editMode !== 'Draw') return null;
+  }, [draw, dragLayer, initDraw, endDraw, isPainting]);
 
   return <canvas className="absolute top-0" ref={drawLayer} />;
 };

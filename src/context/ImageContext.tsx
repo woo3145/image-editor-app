@@ -1,8 +1,10 @@
 import { createContext, Dispatch, ReactNode, useMemo, useState } from 'react';
+import { resizeImage } from '../utils/imageUtils';
 
 interface ContextState {
   image: HTMLImageElement | null;
   degree: number;
+  imageSize: ImageSize | null;
   rootImage: HTMLImageElement | null;
   history: ImageHistoryNode[] | null;
   historyIdx: number | null;
@@ -11,6 +13,7 @@ interface ContextState {
 export const ImageContextState = createContext<ContextState>({
   image: null,
   degree: 0,
+  imageSize: null,
   rootImage: null,
   history: null,
   historyIdx: null,
@@ -33,15 +36,26 @@ export const ImageProvider = ({ children }: { children: ReactNode }) => {
   const [history, setHistory] = useState<ImageHistoryNode[]>([]);
   const [historyIdx, setHistoryIdx] = useState<number>(0);
 
+  const curImage: ImageHistoryNode | null = useMemo(() => {
+    return history[historyIdx] || null;
+  }, [history, historyIdx]);
+
+  const imageSize: ImageSize | null = useMemo(() => {
+    if (curImage === null) return null;
+    const { width, height } = resizeImage(curImage.image, curImage.degree);
+    return { width, height };
+  }, [curImage]);
+
   const imageContextStateValue = useMemo(() => {
     return {
-      image: history[historyIdx]?.image || null,
-      degree: history[historyIdx]?.degree || 0,
+      image: curImage ? curImage.image : null,
+      degree: curImage ? curImage.degree : 0,
+      imageSize,
       rootImage,
       history: history,
       historyIdx: historyIdx,
     };
-  }, [history, historyIdx, rootImage]);
+  }, [history, historyIdx, rootImage, curImage, imageSize]);
 
   const imageContextDispatchValue = useMemo(() => {
     return {
