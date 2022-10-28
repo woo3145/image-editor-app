@@ -1,12 +1,16 @@
 import { BiUndo, BiRedo, BiHistory } from 'react-icons/bi';
-import { MouseEvent, ReactNode, useContext, useMemo } from 'react';
+import { MouseEvent, ReactNode, useContext, useMemo, useState } from 'react';
 import ControllerItem from './ControllerItem';
 import useImageDispatch from '../../hooks/useImageDispatch';
 import { ImageContextState } from '../../context/ImageContext';
+import HistoryPanel from './historyPanel';
 
 const HistoryController = () => {
   const { redo, undo } = useImageDispatch();
   const { history, historyIdx } = useContext(ImageContextState);
+
+  const [panelVisible, setPanelVisible] = useState(false);
+
   // Mode Switching
   const onClickHandler = (e: MouseEvent<HTMLLIElement>) => {
     const command = e.currentTarget.id;
@@ -15,7 +19,7 @@ const HistoryController = () => {
     } else if (command === 'Redo') {
       redo();
     } else if (command === 'History') {
-      console.log(history);
+      setPanelVisible(!panelVisible);
     }
   };
   const controllerItems: {
@@ -52,7 +56,7 @@ const HistoryController = () => {
   }, [history, historyIdx]);
 
   return (
-    <ul className="w-full flex items-center justify-center gap-4 px-4">
+    <ul className="w-full flex items-center justify-center gap-4 px-4 relative">
       {controllerItems.map(({ text, icon, checkDisabled }, idx) => {
         return (
           <ControllerItem
@@ -65,6 +69,11 @@ const HistoryController = () => {
           />
         );
       })}
+      {panelVisible && (
+        <div className="absolute top-14 right-0 z-40 w-52 h-40 overflow-y-scroll bg-white border">
+          <HistoryPanel />
+        </div>
+      )}
     </ul>
   );
 };

@@ -10,7 +10,11 @@ const useImageDispatch = () => {
     useContext(ImageContextDispatch);
 
   const addHistory = useCallback(
-    (image: string | HTMLImageElement, degree: number) => {
+    (
+      image: string | HTMLImageElement,
+      degree: number,
+      type: HistoryNodeType
+    ) => {
       if (!setHistory || !setHistoryIdx) return;
       if (!history || historyIdx === null) return;
 
@@ -21,12 +25,15 @@ const useImageDispatch = () => {
         imageEl.onload = () => {
           setHistory([
             ...history.slice(0, historyIdx + 1),
-            { image: imageEl, degree },
+            { image: imageEl, degree, type },
           ]);
           setHistoryIdx(historyIdx + 1);
         };
       } else {
-        setHistory([...history.slice(0, historyIdx + 1), { image, degree }]);
+        setHistory([
+          ...history.slice(0, historyIdx + 1),
+          { image, degree, type },
+        ]);
         setHistoryIdx(historyIdx + 1);
       }
     },
@@ -42,12 +49,12 @@ const useImageDispatch = () => {
 
         imageEl.onload = () => {
           setRootImage(imageEl);
-          setHistory([{ image: imageEl, degree: 0 }]);
+          setHistory([{ image: imageEl, degree: 0, type: 'load' }]);
           setHistoryIdx(0);
         };
       } else {
         setRootImage(image);
-        setHistory([{ image, degree: 0 }]);
+        setHistory([{ image, degree: 0, type: 'load' }]);
         setHistoryIdx(0);
       }
     },
@@ -66,12 +73,19 @@ const useImageDispatch = () => {
 
     setHistoryIdx(historyIdx + 1);
   };
+  const skip = (idx: number) => {
+    if (!setHistoryIdx || historyIdx === null || !history) return;
+    if (0 <= idx && idx <= history.length - 1) {
+      setHistoryIdx(idx);
+    }
+  };
 
   return {
     addHistory,
     initImage,
     undo,
     redo,
+    skip,
   };
 };
 

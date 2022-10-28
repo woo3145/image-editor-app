@@ -47,7 +47,7 @@ export const ImageLayerProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!image) return;
-    addHistory(image, degree);
+    addHistory(image, degree, 'rotate');
     // deree가 변경 될 때만 호출 됨
     // eslint-disable-next-line
   }, [degree]);

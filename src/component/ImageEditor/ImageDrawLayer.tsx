@@ -141,7 +141,7 @@ const ImageDrawLayer = () => {
 
       const imageEl = new Image();
       imageEl.src = canvas.toDataURL();
-      addHistory(canvas.toDataURL('image/jpeg'), 0);
+      addHistory(canvas.toDataURL('image/jpeg'), 0, 'draw');
     },
     [addHistory, previewLayer, penType, mousePoint, color, range, isPainting]
   );

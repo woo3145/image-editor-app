@@ -39,7 +39,7 @@ const useCropImage = () => {
     previewContext?.putImageData(cropedImage, 0, 0);
 
     resetDragArea();
-    addHistory(previewCanvas.toDataURL('image/jpeg'), degree);
+    addHistory(previewCanvas.toDataURL('image/jpeg'), degree, 'crop');
     setEditMode('None');
   }, [
     dragArea,
