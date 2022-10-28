@@ -10,6 +10,7 @@ const HistoryPanel = () => {
       {history?.map((item, idx) => {
         return (
           <li
+            key={idx}
             className={`px-4 py-1 hover:bg-slate-200 cursor-pointer text-xs first-letter:uppercase
             ${
               historyIdx !== null && historyIdx < idx

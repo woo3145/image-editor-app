@@ -10,7 +10,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import useImageDispatch from '../hooks/useImageDispatch';
 import { ImageContextState } from './ImageContext';
 
 interface ContextState {
@@ -43,14 +42,11 @@ export const ImageLayerProvider = ({ children }: { children: ReactNode }) => {
   const [degree, setDegree] = useState(0);
 
   const { image } = useContext(ImageContextState);
-  const { addHistory } = useImageDispatch();
 
   useEffect(() => {
     if (!image) return;
-    addHistory(image, degree, 'rotate');
-    // deree가 변경 될 때만 호출 됨
-    // eslint-disable-next-line
-  }, [degree]);
+    setDegree(0);
+  }, [image]);
 
   const imageLayerContexStatetValue = useMemo(() => {
     return {
