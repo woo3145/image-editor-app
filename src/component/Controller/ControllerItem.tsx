@@ -20,7 +20,7 @@ const ControllerItem = ({
     <li
       id={text}
       onClick={onClickHandler}
-      className={`p-3 ${selected && 'bg-blue-900 text-white'} ${
+      className={`p-3 ${!disabled && selected && 'bg-blue-900 text-white'} ${
         !selected &&
         !disabled &&
         'hover:bg-blue-900 hover:text-white duration-200'
