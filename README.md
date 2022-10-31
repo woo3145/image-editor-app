@@ -43,7 +43,11 @@
 
 ### Bugs
 
-- [x] 1. 이미지 회전 후 draw시 이미지가 돌아감 (layer context에서 image변경 시 degree 초기화로 해결)
-- [x] 2. 이미지 회전 후 history 저장안됨 (history에 degree추가, Image Layer Provider에서 degree 변경 시 history저장)
+- [x] 1. 이미지 회전 후 draw시 이미지가 돌아감
+     (layer context에서 image변경 시 degree 초기화로 해결)
+- [x] 2. 이미지 회전 후 history 저장안됨
+     (history에 degree추가, Image Layer Provider에서 degree 변경 시 history저장)
 - [x] 3. rotate를 제외한 다른기능 사용시 히스토리에 저장할때 degree 값을 0으로 저장하지만 degree 상태값은 그대로라 버그발생
      (Image Layer Provider에서 degree변화시 history에 저장하지 않고 rotate 버튼 클릭할때 history저장, Image Layer Provider에서 image 변경 시 degree 0으로 초기화)
+- [x] 4. 90, 180, 270도를 회전한 뒤 history에서 90도로 돌아간 후 다시한번 회전시키면 그대로 90도임
+     (Image Layer 의 degree 상태값을 저장할 필요가 없어보여서 제거하고 (history에 degree를 바로 저장하면서 imageLayer의 degree가 자꾸 버그(#3, #4) 생성))

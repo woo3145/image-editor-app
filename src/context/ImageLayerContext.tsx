@@ -1,26 +1,10 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  RefObject,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { ImageContextState } from './ImageContext';
+import { createContext, ReactNode, RefObject, useMemo, useRef } from 'react';
 
 interface ContextState {
   previewLayer: RefObject<HTMLCanvasElement> | null;
   dragLayer: RefObject<HTMLCanvasElement> | null;
   cropLayer: RefObject<HTMLCanvasElement> | null;
   drawLayer: RefObject<HTMLCanvasElement> | null;
-  degree: number;
-}
-interface ContextDispatch {
-  setDegree: Dispatch<SetStateAction<number>>;
 }
 
 export const ImageLayerContextState = createContext<ContextState>({
@@ -28,10 +12,6 @@ export const ImageLayerContextState = createContext<ContextState>({
   dragLayer: null,
   cropLayer: null,
   drawLayer: null,
-  degree: 0,
-});
-export const ImageLayerContextDispatch = createContext<ContextDispatch>({
-  setDegree: () => null,
 });
 
 export const ImageLayerProvider = ({ children }: { children: ReactNode }) => {
@@ -39,14 +19,6 @@ export const ImageLayerProvider = ({ children }: { children: ReactNode }) => {
   const dragLayer = useRef<HTMLCanvasElement>(null);
   const cropLayer = useRef<HTMLCanvasElement>(null);
   const drawLayer = useRef<HTMLCanvasElement>(null);
-  const [degree, setDegree] = useState(0);
-
-  const { image } = useContext(ImageContextState);
-
-  useEffect(() => {
-    if (!image) return;
-    setDegree(0);
-  }, [image]);
 
   const imageLayerContexStatetValue = useMemo(() => {
     return {
@@ -54,22 +26,12 @@ export const ImageLayerProvider = ({ children }: { children: ReactNode }) => {
       dragLayer,
       cropLayer,
       drawLayer,
-      degree,
     };
-  }, [previewLayer, degree]);
-  const imageLayerContextDispatchValue = useMemo(() => {
-    return {
-      setDegree,
-    };
-  }, [setDegree]);
+  }, [previewLayer]);
 
   return (
     <ImageLayerContextState.Provider value={imageLayerContexStatetValue}>
-      <ImageLayerContextDispatch.Provider
-        value={imageLayerContextDispatchValue}
-      >
-        {children}
-      </ImageLayerContextDispatch.Provider>
+      {children}
     </ImageLayerContextState.Provider>
   );
 };
