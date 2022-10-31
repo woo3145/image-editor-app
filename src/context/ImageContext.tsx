@@ -37,7 +37,7 @@ export const ImageProvider = ({ children }: { children: ReactNode }) => {
   const [historyIdx, setHistoryIdx] = useState<number>(0);
 
   const curImage: ImageHistoryNode | null = useMemo(() => {
-    return history[historyIdx] || null;
+    return history[historyIdx] ? history[historyIdx] : null;
   }, [history, historyIdx]);
 
   const imageSize: ImageSize | null = useMemo(() => {
