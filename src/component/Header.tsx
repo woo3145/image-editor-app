@@ -1,16 +1,20 @@
 import { ChangeEvent, useContext } from 'react';
-import { ImageContextState } from '../context/ImageContext';
-import useImageDispatch from '../hooks/useImageDispatch';
+import {
+  ImageContextDispatch,
+  ImageContextState,
+} from '../context/ImageContext';
+import { loadImage } from '../utils/imageUtils';
 
 const Header = () => {
   const { image } = useContext(ImageContextState);
-  const { initImage } = useImageDispatch();
+  const { initImage } = useContext(ImageContextDispatch);
 
-  const onChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length) {
       const file = e.target.files;
       const fileUrl = URL.createObjectURL(file[0]);
-      initImage(fileUrl);
+      const img = await loadImage(fileUrl);
+      initImage(img);
     }
   };
   const downloadImage = () => {

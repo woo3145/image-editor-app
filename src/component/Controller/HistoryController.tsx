@@ -1,18 +1,21 @@
 import { BiUndo, BiRedo, BiHistory } from 'react-icons/bi';
 import { MouseEvent, ReactNode, useContext, useMemo, useState } from 'react';
 import ControllerItem from './ControllerItem';
-import useImageDispatch from '../../hooks/useImageDispatch';
-import { ImageContextState } from '../../context/ImageContext';
+import {
+  ImageContextDispatch,
+  ImageContextState,
+} from '../../context/ImageContext';
 import HistoryPanel from './historyPanel';
 
 const HistoryController = () => {
-  const { redo, undo } = useImageDispatch();
+  const { redo, undo } = useContext(ImageContextDispatch);
   const { history, historyIdx } = useContext(ImageContextState);
 
   const [panelVisible, setPanelVisible] = useState(false);
 
   // Mode Switching
   const onClickHandler = (e: MouseEvent<HTMLLIElement>) => {
+    if (!undo || !redo) return;
     const command = e.currentTarget.id;
     if (command === 'Undo') {
       undo();

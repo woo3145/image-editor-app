@@ -1,8 +1,11 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { DrawContextState } from '../../context/DrawContext';
-import { ImageContextState } from '../../context/ImageContext';
+import {
+  ImageContextDispatch,
+  ImageContextState,
+} from '../../context/ImageContext';
 import { ImageLayerContextState } from '../../context/ImageLayerContext';
-import useImageDispatch from '../../hooks/useImageDispatch';
+import { loadImage } from '../../utils/imageUtils';
 
 const ImageDrawLayer = () => {
   const { previewLayer, dragLayer, drawLayer } = useContext(
@@ -10,8 +13,7 @@ const ImageDrawLayer = () => {
   );
   const { range, color, penType } = useContext(DrawContextState);
   const { imageSize } = useContext(ImageContextState);
-
-  const { addHistory } = useImageDispatch();
+  const { addHistory } = useContext(ImageContextDispatch);
 
   const [mousePoint, setMousePoint] = useState({ x: 0, y: 0, w: 0, h: 0 });
   const [isPainting, setIsPainting] = useState(false);
@@ -115,7 +117,7 @@ const ImageDrawLayer = () => {
   );
 
   const endDraw = useCallback(
-    (e: MouseEvent) => {
+    async (e: MouseEvent) => {
       if (isPainting === false) return;
       console.log('End Draw');
       setIsPainting(false);
@@ -139,9 +141,8 @@ const ImageDrawLayer = () => {
         setMousePoint({ x: 0, y: 0, w: 0, h: 0 });
       }
 
-      const imageEl = new Image();
-      imageEl.src = canvas.toDataURL();
-      addHistory(canvas.toDataURL('image/jpeg'), 0, 'draw');
+      const img = await loadImage(canvas.toDataURL('image/jpeg'));
+      addHistory(img, 0, 'draw');
     },
     [addHistory, previewLayer, penType, mousePoint, color, range, isPainting]
   );

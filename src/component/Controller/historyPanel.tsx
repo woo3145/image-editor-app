@@ -1,10 +1,16 @@
 import { useContext } from 'react';
-import { ImageContextState } from '../../context/ImageContext';
-import useImageDispatch from '../../hooks/useImageDispatch';
+import {
+  ImageContextDispatch,
+  ImageContextState,
+} from '../../context/ImageContext';
 
 const HistoryPanel = () => {
   const { history, historyIdx } = useContext(ImageContextState);
-  const { skip } = useImageDispatch();
+  const { skip } = useContext(ImageContextDispatch);
+  const onClick = (idx: number) => {
+    if (!skip) return;
+    skip(idx);
+  };
   return (
     <ul className="">
       {history?.map((item, idx) => {
@@ -17,7 +23,7 @@ const HistoryPanel = () => {
                 ? 'text-gray-300'
                 : 'text-black'
             }`}
-            onClick={() => skip(idx)}
+            onClick={() => onClick(idx)}
           >
             {item.type === 'load' ? `load` : null}
             {item.type === 'draw' ? `draw` : null}

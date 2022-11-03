@@ -4,8 +4,9 @@ import {
   DragAreaContextState,
 } from '../context/DragAreaContext';
 import { EditModeContextDispatch } from '../context/EditModeContext';
+import { ImageContextDispatch } from '../context/ImageContext';
 import { ImageLayerContextState } from '../context/ImageLayerContext';
-import useImageDispatch from './useImageDispatch';
+import { loadImage } from '../utils/imageUtils';
 
 const useCropImage = () => {
   const { dragArea, isEmpty } = useContext(DragAreaContextState);
@@ -13,9 +14,9 @@ const useCropImage = () => {
 
   const { setEditMode } = useContext(EditModeContextDispatch);
   const { resetDragArea } = useContext(DragAreaContextDispatch);
-  const { addHistory } = useImageDispatch();
+  const { addHistory } = useContext(ImageContextDispatch);
 
-  const onClickApply = useCallback(() => {
+  const onClickApply = useCallback(async () => {
     if (!previewLayer?.current || !dragArea || !resetDragArea || !setEditMode)
       return;
     if (isEmpty) {
@@ -39,7 +40,8 @@ const useCropImage = () => {
     previewContext?.putImageData(cropedImage, 0, 0);
 
     resetDragArea();
-    addHistory(previewCanvas.toDataURL('image/jpeg'), 0, 'crop');
+    const img = await loadImage(previewCanvas.toDataURL('image/jpeg'));
+    addHistory(img, 0, 'crop');
     setEditMode('None');
   }, [dragArea, isEmpty, resetDragArea, previewLayer, addHistory, setEditMode]);
 

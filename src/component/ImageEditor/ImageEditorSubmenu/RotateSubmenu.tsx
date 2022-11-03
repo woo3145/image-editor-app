@@ -1,8 +1,9 @@
+import { useContext } from 'react';
 import { GrRotateLeft, GrRotateRight } from 'react-icons/gr';
-import useRotateImage from '../../../hooks/useRotateImage';
+import { ImageContextDispatch } from '../../../context/ImageContext';
 
 const RotateSubmenu = () => {
-  const { rotateLeft, rotateRight } = useRotateImage();
+  const { rotateLeft, rotateRight } = useContext(ImageContextDispatch);
 
   return (
     <div className="flex flex-col items-center">
