@@ -12,7 +12,7 @@ const ImageEditor = () => {
   const { editMode } = useContext(EditModeContextState);
 
   return (
-    <div className="w-full max-w-screen-lg pt-2 ">
+    <div className="w-full max-w-screen-lg pt-2">
       <ImageEditorSubmenu />
       {image ? (
         <div className="w-full flex items-center justify-center relative">

@@ -27,7 +27,7 @@ export const resizeImage = (
   }
 };
 
-export const loadImage = (src: string): Promise<any> => {
+export const loadImage = (src: string): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'Anonymous';

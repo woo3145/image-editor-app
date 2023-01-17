@@ -34,7 +34,9 @@ const ImagePreviewLayer = () => {
     context.restore();
   }, [image, previewLayer, degree, imageSize]);
 
-  return <canvas className="top-0" ref={previewLayer} />;
+  return (
+    <canvas className="top-0 border-2 border-blue-900" ref={previewLayer} />
+  );
 };
 
 export default ImagePreviewLayer;
