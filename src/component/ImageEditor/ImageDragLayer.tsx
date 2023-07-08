@@ -13,7 +13,7 @@ const ImageDragLayer = () => {
 
   // Drag Layer 생성
   useEffect(() => {
-    if (!dragLayer?.current || editMode === 'None' || !imageSize) return;
+    if (!dragLayer?.current || !imageSize) return;
     const canvas = dragLayer.current;
     canvas.width = imageSize.width;
     canvas.height = imageSize.height;
